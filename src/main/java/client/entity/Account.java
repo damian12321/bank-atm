@@ -1,4 +1,7 @@
 package client.entity;
+
+import client.RESTClient.RESTClient;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -23,6 +26,7 @@ public class Account {
         this.isActive = true;
         this.pinNumber = pinNumber;
     }
+
     public Account(int accountNumber, int pinNumber, float balance) {
         this.accountNumber = accountNumber;
         this.balance = balance;

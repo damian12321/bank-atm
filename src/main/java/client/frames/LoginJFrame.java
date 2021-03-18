@@ -1,5 +1,6 @@
 package client.frames;
 
+import client.RESTClient.RESTClient;
 import client.entity.Customer;
 
 import javax.swing.*;
@@ -21,6 +22,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
     JButton createAccountButton = new JButton("Create new account");
     JButton exitAppButton = new JButton("Exit");
     JCheckBox showPassword = new JCheckBox("Show Password");
+    JLabel informationMessage = new JLabel();
 
 
     public LoginJFrame() {
@@ -61,7 +63,8 @@ public class LoginJFrame extends JFrame implements ActionListener {
         resetButton.setBounds(400, 300, 100, 30);
         createAccountButton.setBounds(450, 550, 200, 30);
         exitAppButton.setBounds(150, 550, 200, 30);
-
+        informationMessage.setBounds(250, 320, 300, 100);
+        informationMessage.setVisible(false);
 
     }
 
@@ -81,6 +84,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
         container.add(resetButton);
         container.add(createAccountButton);
         container.add(exitAppButton);
+        container.add(informationMessage);
     }
 
     public void addActionEvent() {
@@ -99,12 +103,32 @@ public class LoginJFrame extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == loginButton) {
-            String userText;
-            String pwdText;
-            userText = userTextField.getText();
-            pwdText = passwordField.getText();
-            System.out.println(userText);
-            System.out.println(pwdText);
+            boolean error = false;
+            String text = "";
+
+            if (userTextField.getText().isEmpty() || passwordField.getText().isEmpty()){
+                error = true;
+                text = "Data fields must not be empty.";
+            }
+
+            if (error) {
+                informationMessage.setForeground(Color.red);
+                informationMessage.setText(text);
+                informationMessage.setVisible(true);
+            } else {
+                customer = RESTClient.getCustomer(Integer.parseInt(userTextField.getText()),passwordField.getText());
+                if(customer==null){
+                    informationMessage.setVisible(true);
+                    informationMessage.setText("The user name or password is incorrect.");
+                    informationMessage.setForeground(Color.red);
+                }else
+                {
+                    System.out.println(customer);
+                    //TODO
+                }
+
+            }
+
         }
         if (e.getSource() == resetButton) {
             userTextField.setText("");
@@ -117,8 +141,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
                 passwordField.setEchoChar('*');
             }
         }
-        if(e.getSource()==createAccountButton)
-        {
+        if (e.getSource() == createAccountButton) {
             new CreateAccountFrame();
             this.dispose();
         }

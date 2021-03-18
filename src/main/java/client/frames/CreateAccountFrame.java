@@ -1,5 +1,6 @@
 package client.frames;
 
+import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.entity.Customer;
 
@@ -12,6 +13,7 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Customer customer;
     private Account account;
+    private boolean customerAdded = false;
     Container container = getContentPane();
     JLabel welcomeTextLabel = new JLabel("Create new account");
     JLabel infoAboutPin = new JLabel("Pin number will be used to the account transactions. Only digits allowed.");
@@ -21,7 +23,8 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
     JLabel customersPasswordConfirm = new JLabel("Password confirm: ");
     JLabel accountsPin = new JLabel("Pin number: ");
     JLabel accountsPinConfirm = new JLabel("Pin number confirm: ");
-    JLabel informationMassage = new JLabel();
+    JLabel informationMessage = new JLabel();
+    JLabel accountCreatedMessage = new JLabel();
     JTextField customersNameField = new JTextField();
     JTextField customersLastNameField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
@@ -61,7 +64,7 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
     }
 
     public void setLocationAndSize() {
-        welcomeTextLabel.setBounds(300, 10, 400, 100);
+        welcomeTextLabel.setBounds(300, 20, 400, 30);
         customersName.setBounds(250, 100, 100, 30);
         customersLastName.setBounds(250, 170, 100, 30);
         customersPassword.setBounds(250, 240, 100, 30);
@@ -78,13 +81,16 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
         accountsPinConfirm.setBounds(200, 450, 200, 30);
         accountsPinConfirmField.setBounds(350, 450, 150, 30);
         infoAboutPin.setBounds(250, 410, 450, 30);
-        informationMassage.setBounds(250, 550, 300, 100);
+        informationMessage.setBounds(250, 550, 500, 100);
+        accountCreatedMessage.setBounds(100, 560, 700, 100);
     }
 
     public void setProperties() {
         welcomeTextLabel.setFont(new Font("INK Free", Font.BOLD, 20));
         infoAboutPin.setForeground(Color.red);
-        informationMassage.setVisible(false);
+        informationMessage.setVisible(false);
+        accountCreatedMessage.setVisible(false);
+        accountCreatedMessage.setFont(new Font("INK Free", Font.BOLD, 20));
     }
 
     public void addComponentsToContainer() {
@@ -105,7 +111,8 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
         container.add(accountsPinConfirm);
         container.add(accountsPinConfirmField);
         container.add(infoAboutPin);
-        container.add(informationMassage);
+        container.add(informationMessage);
+        container.add(accountCreatedMessage);
     }
 
     public void addActionEvent() {
@@ -117,7 +124,6 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (e.getSource() == resetButton) {
             customersNameField.setText("");
             customersLastNameField.setText("");
@@ -130,7 +136,7 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
             new LoginJFrame();
             this.dispose();
         }
-        if (e.getSource() == createAccountButton) {
+        if ((e.getSource() == createAccountButton)&&!customerAdded) {
             boolean error = false;
             String text = "<html>";
             if (!passwordField.getText().equals(passwordConfirmField.getText())) {
@@ -141,29 +147,41 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
                 error = true;
                 text = text + "Pin numbers are not the same.<br>";
             }
-            char[] chars = accountsPinField.getText().toCharArray();
-            for(char c : chars){
-                if(!Character.isDigit(c)){
+            char[] charsPin = accountsPinField.getText().toCharArray();
+            for (char c : charsPin) {
+                if (!Character.isDigit(c)) {
                     error = true;
                     text = text + "Pin number is not correct.<br>";
                 }
             }
-            if(customersNameField.getText().isEmpty()||customersLastNameField.getText().isEmpty()||passwordField.getText().isEmpty()
-            ||accountsPinField.getText().isEmpty())
-            {
+
+            if (customersNameField.getText().isEmpty() || customersLastNameField.getText().isEmpty() || passwordField.getText().isEmpty()
+                    || accountsPinField.getText().isEmpty()) {
                 error = true;
                 text = text + "Data fields must not be empty.<br>";
             }
 
             if (error) {
-                informationMassage.setForeground(Color.red);
-                informationMassage.setText(text);
-                informationMassage.setText(text+"</html>");
-                informationMassage.setVisible(true);
+                informationMessage.setForeground(Color.red);
+                informationMessage.setText(text);
+                informationMessage.setText(text + "</html>");
+                informationMessage.setVisible(true);
             } else {
-//                Account account=new Account()
-                informationMassage.setText("Your account has been added. You can log in now.");
-                informationMassage.setForeground(Color.green);
+                int accountNumber = RESTClient.getFreeAccountNumber();
+                account = new Account(accountNumber, Integer.parseInt(accountsPinField.getText()), 0);
+                customer = new Customer(customersNameField.getText(), customersLastNameField.getText(), account, passwordField.getText());
+                Customer response = RESTClient.createCustomer(customer);
+                if (response!=null) {
+                    accountCreatedMessage.setVisible(true);
+                    customerAdded=true;
+                    accountCreatedMessage.setText("<html>Your account has been added. Your account id number is: " + response.getId() +
+                            ".<br>You can log in now.</html>");
+                    accountCreatedMessage.setForeground(Color.green);
+                } else {
+                    informationMessage.setVisible(true);
+                    informationMessage.setText("Something went wrong.");
+                    informationMessage.setForeground(Color.red);
+                }
 
             }
         }

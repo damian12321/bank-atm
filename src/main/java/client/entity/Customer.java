@@ -1,4 +1,5 @@
 package client.entity;
+
 import java.util.Objects;
 
 
@@ -20,9 +21,11 @@ public class Customer {
         this.password = password;
     }
 
-    public Customer(String firstName, String lastName) {
+    public Customer(String firstName, String lastName, Account account, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.account = account;
+        this.password = password;
     }
 
     public int getId() {
