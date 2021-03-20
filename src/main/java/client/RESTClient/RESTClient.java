@@ -2,6 +2,7 @@ package client.RESTClient;
 
 import client.entity.Account;
 import client.entity.Customer;
+import client.utils.DateDeserializer;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
@@ -75,7 +76,6 @@ public class RESTClient {
                     response.append(responseLine.trim());
                 }
                 customer = new Gson().fromJson(response.toString(), Customer.class);
-                System.out.println(response.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,40 +83,43 @@ public class RESTClient {
         return customer;
     }
 
-    public static void updateCustomer(Customer customer) throws IOException {
-        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/");
-        URLConnection urlConnection = url.openConnection();
-        HttpURLConnection con = (HttpURLConnection) urlConnection;
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestMethod("PUT");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        String userPass = "admin" + ":" + "admin";
-        String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
-        con.setRequestProperty("Authorization", basicAuth);
-        Account account = new Account();
-        String object = new Gson().toJson(account);
-        try (OutputStream os = con.getOutputStream()) {
-            byte[] input = object.getBytes("utf-8");
-            os.write(input, 0, input.length);
-        }
-        Account result = null;
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
+    public static Customer updateCustomer(Customer customer) {
+        Customer result = null;
+        try {
+            URL url = new URL("http://localhost:8080/spring_bank_war/api/customer");
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestMethod("PUT");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+            String object = new GsonBuilder().setDateFormat("dd-MM-yyyy hh:mm:ss").create().toJson(customer);
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = object.getBytes("utf-8");
+                os.write(input, 0, input.length);
             }
-            result = new Gson().fromJson(response.toString(), Account.class);
-            System.out.println(response.toString());
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                StringBuilder response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                result = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(response.toString(), Customer.class);
 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return result;
     }
 
 
     public static Customer getCustomer(int idNumber, String password) {
-        Customer customer=null;
+        Customer customer = null;
         try {
             String urlString = "http://localhost:8080/spring_bank_war/api/customer/" + idNumber + "/" + password;
             URL url = new URL(urlString);
@@ -127,16 +130,9 @@ public class RESTClient {
             String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
             con.setRequestProperty("Authorization", basicAuth);
             InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream());
-            customer= new GsonBuilder()
-                    .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                        public Date deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
-                            return new Date(jsonElement.getAsJsonPrimitive().getAsLong());
-                        }
-                    })
-                    .create().fromJson(inputStreamReader,Customer.class);
+            customer = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(inputStreamReader, Customer.class);
             inputStreamReader.close();
-        }catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return customer;

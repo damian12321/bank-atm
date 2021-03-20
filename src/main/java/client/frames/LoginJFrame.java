@@ -43,7 +43,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
         int iCoordX = (objDimension.width - this.getWidth()) / 2;
         int iCoordY = (objDimension.height - this.getHeight()) / 2;
         this.setLocation(iCoordX, iCoordY);
-        this.getContentPane().setBackground(new Color(227, 227, 227));
+        this.getContentPane().setBackground(COLOR);
         this.setResizable(false);
         this.setVisible(true);
     }
@@ -123,7 +123,6 @@ public class LoginJFrame extends JFrame implements ActionListener {
                     informationMessage.setForeground(Color.red);
                 }else
                 {
-                    System.out.println(customer);
                    new AccountPanelFrame(customer);
                    this.dispose();
                 }

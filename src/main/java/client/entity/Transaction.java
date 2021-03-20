@@ -1,5 +1,7 @@
 package client.entity;
+
 import client.enums.TransactionType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
 import java.util.Objects;
@@ -9,6 +11,7 @@ public class Transaction {
     private int id;
     private TransactionType transactionType;
     private float amount;
+    @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     private Date date;
     private String description;
 

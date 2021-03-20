@@ -29,13 +29,13 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     JButton changePersonalDataButton = new JButton("Change personal data");
     JButton changePasswordButton = new JButton("Change password");
     JButton changePinNumberButton = new JButton("Change pin number");
-    JPanel tableLabel=new JPanel();
+    JPanel tableLabel = new JPanel();
 
 
     public AccountPanelFrame(Customer customer) {
         this.customer = customer;
         this.account = customer.getAccount();
-        this.transactionList=account.getTransactionList();
+        this.transactionList = account.getTransactionList();
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -53,7 +53,7 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
         int iCordX = (objDimension.width - this.getWidth()) / 2;
         int iCordY = (objDimension.height - this.getHeight()) / 2;
         this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(new Color(227, 227, 227));
+        this.getContentPane().setBackground(COLOR);
         this.setResizable(false);
         this.setVisible(true);
     }
@@ -100,25 +100,26 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
         container.add(changePinNumberButton);
         container.add(changePersonalDataButton);
     }
+
     public void initTable() {
         String[] columnNames = {"Nr",
                 "Type",
                 "Amount",
                 "Description",
                 "Date"};
-        Collections.sort(transactionList, (o1, o2) -> (int)(o2.getDate().getTime()-o1.getDate().getTime()));
+        Collections.sort(transactionList, (o1, o2) -> (int) (o2.getDate().getTime() - o1.getDate().getTime()));
         Object[][] data = new Object[transactionList.size()][5];
         for (int i = 0; i < data.length; i++) {
             for (int j = 0; j < data[i].length; j++) {
                 switch (j) {
                     case 0:
-                        data[i][j] = i+1;
+                        data[i][j] = i + 1;
                         break;
                     case 1:
                         data[i][j] = transactionList.get(i).getTransactionType();
                         break;
                     case 2:
-                        data[i][j] = transactionList.get(i).getAmount()+" zł";
+                        data[i][j] = transactionList.get(i).getAmount() + " zł";
                         break;
                     case 3:
                         data[i][j] = transactionList.get(i).getDescription();
@@ -136,10 +137,10 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
         };
         JTable table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(680, 240));
-        table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 
-            table.getColumnModel().getColumn(0).setPreferredWidth(30);
+        table.getColumnModel().getColumn(0).setPreferredWidth(30);
         table.getColumnModel().getColumn(1).setPreferredWidth(150);
         table.getColumnModel().getColumn(2).setPreferredWidth(100);
         table.getColumnModel().getColumn(3).setPreferredWidth(200);
@@ -155,15 +156,29 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     public void addActionEvent() {
         createNewTransactionButton.addActionListener(this);
         logoutBackButton.addActionListener(this);
+        changePasswordButton.addActionListener(this);
+        changePersonalDataButton.addActionListener(this);
+        changePinNumberButton.addActionListener(this);
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-if(e.getSource()==logoutBackButton)
-{
-    new LoginJFrame();
-    this.dispose();
-}
+        if (e.getSource() == logoutBackButton) {
+            new LoginJFrame();
+            this.dispose();
+        }
+        if (e.getSource() == changePinNumberButton) {
+            new ChangePinFrame(customer);
+            this.dispose();
+        }
+        if (e.getSource() == changePersonalDataButton) {
+            new ChangeDataFrame(customer);
+            this.dispose();
+        }
+        if (e.getSource() == changePasswordButton) {
+            new ChangePasswordFrame(customer);
+            this.dispose();
+        }
     }
 }
