@@ -124,7 +124,8 @@ public class LoginJFrame extends JFrame implements ActionListener {
                 }else
                 {
                     System.out.println(customer);
-                    //TODO
+                   new AccountPanelFrame(customer);
+                   this.dispose();
                 }
 
             }

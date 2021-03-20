@@ -2,7 +2,7 @@ package client.RESTClient;
 
 import client.entity.Account;
 import client.entity.Customer;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
@@ -13,7 +13,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -23,7 +25,7 @@ public class RESTClient {
         int accountNumber = 0;
         StringBuilder response = null;
         try {
-            URL url = new URL("http://localhost:8080/bank_war/api/account/number/");
+            URL url = new URL("http://localhost:8080/spring_bank_war/api/account/number/");
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection con = (HttpURLConnection) urlConnection;
             con.setRequestMethod("GET");
@@ -49,7 +51,7 @@ public class RESTClient {
 
     public static Customer createCustomer(Customer customer) {
         try {
-            URL url = new URL("http://localhost:8080/bank_war/api/customer");
+            URL url = new URL("http://localhost:8080/spring_bank_war/api/customer");
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection con = (HttpURLConnection) urlConnection;
             con.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -82,7 +84,7 @@ public class RESTClient {
     }
 
     public static void updateCustomer(Customer customer) throws IOException {
-        URL url = new URL("http://localhost:8080/bank_war/api/account/");
+        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/");
         URLConnection urlConnection = url.openConnection();
         HttpURLConnection con = (HttpURLConnection) urlConnection;
         con.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -116,7 +118,7 @@ public class RESTClient {
     public static Customer getCustomer(int idNumber, String password) {
         Customer customer=null;
         try {
-            String urlString = "http://localhost:8080/bank_war/api/customer/" + idNumber + "/" + password;
+            String urlString = "http://localhost:8080/spring_bank_war/api/customer/" + idNumber + "/" + password;
             URL url = new URL(urlString);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection con = (HttpURLConnection) urlConnection;
@@ -125,8 +127,13 @@ public class RESTClient {
             String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
             con.setRequestProperty("Authorization", basicAuth);
             InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream());
-            customer = new Gson().fromJson(inputStreamReader, Customer.class);
-
+            customer= new GsonBuilder()
+                    .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                        public Date deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) throws JsonParseException {
+                            return new Date(jsonElement.getAsJsonPrimitive().getAsLong());
+                        }
+                    })
+                    .create().fromJson(inputStreamReader,Customer.class);
             inputStreamReader.close();
         }catch (IOException e)
         {
@@ -136,7 +143,7 @@ public class RESTClient {
     }
 
     public static void getCustomers() throws IOException {
-        URL url = new URL("http://localhost:8080/bank_war/api/account/");
+        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/");
         URLConnection urlConnection = url.openConnection();
         HttpURLConnection con = (HttpURLConnection) urlConnection;
         con.setRequestMethod("GET");
@@ -150,7 +157,7 @@ public class RESTClient {
     }
 
     public static void deleteCustomer() throws IOException {
-        URL url = new URL("http://localhost:8080/bank_war/api/account/22");
+        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/22");
         URLConnection urlConnection = url.openConnection();
         HttpURLConnection con = (HttpURLConnection) urlConnection;
         con.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -174,7 +181,7 @@ public class RESTClient {
     }
 
     public static void getTransactions(int accountNumber) throws IOException {
-        URL url = new URL("http://localhost:8080/bank_war/api/account/22");
+        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/22");
         URLConnection urlConnection = url.openConnection();
         HttpURLConnection con = (HttpURLConnection) urlConnection;
         con.setRequestProperty("Content-Type", "application/json; utf-8");

@@ -171,7 +171,7 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
                 account = new Account(accountNumber, Integer.parseInt(accountsPinField.getText()), 0);
                 customer = new Customer(customersNameField.getText(), customersLastNameField.getText(), account, passwordField.getText());
                 Customer response = RESTClient.createCustomer(customer);
-                if (response!=null) {
+                if (response.getId()!=0) {
                     accountCreatedMessage.setVisible(true);
                     customerAdded=true;
                     accountCreatedMessage.setText("<html>Your account has been added. Your account id number is: " + response.getId() +
