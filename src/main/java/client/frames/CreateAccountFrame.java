@@ -178,6 +178,8 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
                     accountCreatedMessage.setText("<html>Your account has been added. Your account id number is: " + response.getId() +
                             ".<br>You can log in now.</html>");
                     accountCreatedMessage.setForeground(Color.green);
+                    JOptionPane.showMessageDialog(this,"Your account has been added. Your account id number is: " + response.getId() +
+                    ".You can log in now.");
                 } else {
                     informationMessage.setVisible(true);
                     informationMessage.setText("Something went wrong.");

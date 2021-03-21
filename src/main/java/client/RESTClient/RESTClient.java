@@ -2,6 +2,7 @@ package client.RESTClient;
 
 import client.entity.Account;
 import client.entity.Customer;
+import client.exception.CustomExceptionHandler;
 import client.utils.DateDeserializer;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -111,6 +112,139 @@ public class RESTClient {
                 result = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(response.toString(), Customer.class);
 
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String transferMoney(int fromAccount, int pinNumber, int destinationAccount, float amount, String description) {
+        String result = null;
+        try {
+            String urlString = "http://localhost:8080/spring_bank_war/api/transfer/" + fromAccount + "/" + pinNumber + "/" + destinationAccount + "/" + amount + "/";
+            System.out.println(urlString);
+            URL url = new URL(urlString);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+            String object = new GsonBuilder().setDateFormat("dd-MM-yyyy hh:mm:ss").create().toJson(description);
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = object.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+            BufferedReader br = null;
+            InputStreamReader isr = null;
+            if (100 <= con.getResponseCode() && con.getResponseCode() <= 399) {
+                isr = new InputStreamReader(con.getInputStream());
+            } else {
+                isr = new InputStreamReader(con.getErrorStream());
+            }
+            br = new BufferedReader(isr);
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+            if (100 <= con.getResponseCode() && con.getResponseCode() <= 399) {
+                result = response.toString();
+                System.out.println(response.toString());
+            } else {
+                System.out.println(response.toString());
+                CustomExceptionHandler exception = new Gson().fromJson(response.toString(), CustomExceptionHandler.class);
+                result = exception.getMessage();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String withdrawMoney(int account, int pinNumber, float amount) {
+        String result = null;
+        try {
+            String urlString = "http://localhost:8080/spring_bank_war/api/withdraw/" + account + "/" + pinNumber + "/" + amount;
+            URL url = new URL(urlString);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+
+            BufferedReader br = null;
+            InputStreamReader isr = null;
+            if (100 <= con.getResponseCode() && con.getResponseCode() <= 399) {
+                isr = new InputStreamReader(con.getInputStream());
+            } else {
+                isr = new InputStreamReader(con.getErrorStream());
+            }
+            br = new BufferedReader(isr);
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+
+            if (100 <= con.getResponseCode() && con.getResponseCode() <= 399) {
+                result = response.toString();
+            } else {
+                CustomExceptionHandler exception = new Gson().fromJson(response.toString(), CustomExceptionHandler.class);
+                result = exception.getMessage();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String depositMoney(int account, int pinNumber, float amount) {
+        String result = null;
+        try {
+            String urlString = "http://localhost:8080/spring_bank_war/api/deposit/" + account + "/" + pinNumber + "/" + amount;
+            URL url = new URL(urlString);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+
+            BufferedReader br = null;
+            InputStreamReader isr = null;
+            if (100 <= con.getResponseCode() && con.getResponseCode() <= 399) {
+                isr = new InputStreamReader(con.getInputStream());
+            } else {
+                isr = new InputStreamReader(con.getErrorStream());
+            }
+            br = new BufferedReader(isr);
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+
+            if (100 <= con.getResponseCode() && con.getResponseCode() <= 399) {
+                result = response.toString();
+            } else {
+                CustomExceptionHandler exception = new Gson().fromJson(response.toString(), CustomExceptionHandler.class);
+                result = exception.getMessage();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

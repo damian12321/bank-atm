@@ -26,6 +26,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
     JPasswordField oldPinNumberField = new JPasswordField();
     JPasswordField accountsPinField = new JPasswordField();
     JPasswordField accountsPinConfirmField = new JPasswordField();
+    JCheckBox showPin = new JCheckBox("Show Pin");
     JButton resetButton = new JButton("Reset");
     JButton submitButton = new JButton("Submit");
     JButton accountBackButton = new JButton("Back to account");
@@ -67,6 +68,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         accountsPin.setBounds(250, 170, 100, 30);
         accountsPinConfirm.setBounds(205, 240, 150, 30);
         oldPinNumberField.setBounds(350, 100, 150, 30);
+        showPin.setBounds(350, 130, 150, 30);
         accountsPinField.setBounds(350, 170, 150, 30);
         accountsPinConfirmField.setBounds(350, 240, 150, 30);
         resetButton.setBounds(370, 280, 100, 30);
@@ -83,6 +85,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         informationMessage.setVisible(false);
         pinChangedMassage.setVisible(false);
         pinChangedMassage.setFont(new Font("INK Free", Font.BOLD, 20));
+        showPin.setBackground(COLOR);
     }
 
     public void addComponentsToContainer() {
@@ -99,12 +102,14 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         container.add(infoAboutPin);
         container.add(informationMessage);
         container.add(pinChangedMassage);
+        container.add(showPin);
     }
 
     public void addActionEvent() {
         resetButton.addActionListener(this);
         submitButton.addActionListener(this);
         accountBackButton.addActionListener(this);
+        showPin.addActionListener(this);
     }
 
 
@@ -118,6 +123,13 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         if (e.getSource() == accountBackButton) {
             new AccountPanelFrame(customer);
             this.dispose();
+        }
+        if (e.getSource() == showPin) {
+            if (showPin.isSelected()) {
+                oldPinNumberField.setEchoChar((char) 0);
+            } else {
+                oldPinNumberField.setEchoChar('*');
+            }
         }
         if ((e.getSource() == submitButton) && !pinChanged) {
             boolean error = false;

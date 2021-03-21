@@ -13,7 +13,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
     private Customer customer;
     Container container = getContentPane();
     JLabel welcomeTextLabel = new JLabel("Welcome in Damian's Bank, please login. ");
-    JLabel accountIdLabel = new JLabel("Account id: ");
+    JLabel accountIdLabel = new JLabel("Customer id: ");
     JLabel passwordLabel = new JLabel("Password: ");
     JTextField userTextField = new JTextField();
     JPasswordField passwordField = new JPasswordField();

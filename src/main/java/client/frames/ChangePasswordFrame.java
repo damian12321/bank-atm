@@ -25,6 +25,7 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
     JPasswordField oldPasswordField = new JPasswordField();
     JPasswordField passwordField = new JPasswordField();
     JPasswordField passwordConfirmField = new JPasswordField();
+    JCheckBox showPassword = new JCheckBox("Show Password");
     JButton resetButton = new JButton("Reset");
     JButton submitButton = new JButton("Submit");
     JButton accountBackButton = new JButton("Back to account");
@@ -33,7 +34,7 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
     public ChangePasswordFrame(Customer customer) {
         this.customer = customer;
         this.account = customer.getAccount();
-        this.oldPwd=customer.getPassword();
+        this.oldPwd = customer.getPassword();
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -64,6 +65,7 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
         welcomeTextLabel.setBounds(300, 20, 400, 30);
         oldPassword.setBounds(230, 100, 100, 30);
         oldPasswordField.setBounds(350, 100, 150, 30);
+        showPassword.setBounds(350, 130, 150, 30);
         customersPassword.setBounds(250, 170, 100, 30);
         passwordField.setBounds(350, 170, 150, 30);
         customersPasswordConfirm.setBounds(205, 240, 150, 30);
@@ -76,10 +78,12 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
     }
 
     public void setProperties() {
-        welcomeTextLabel.setFont(new Font("INK Free", Font.BOLD, 20));;
+        welcomeTextLabel.setFont(new Font("INK Free", Font.BOLD, 20));
+        ;
         informationMessage.setVisible(false);
         passwordChangedMassage.setVisible(false);
         passwordChangedMassage.setFont(new Font("INK Free", Font.BOLD, 20));
+        showPassword.setBackground(COLOR);
     }
 
     public void addComponentsToContainer() {
@@ -95,12 +99,14 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
         container.add(customersPasswordConfirm);
         container.add(informationMessage);
         container.add(passwordChangedMassage);
+        container.add(showPassword);
     }
 
     public void addActionEvent() {
         resetButton.addActionListener(this);
         submitButton.addActionListener(this);
         accountBackButton.addActionListener(this);
+        showPassword.addActionListener(this);
     }
 
 
@@ -114,6 +120,13 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
         if (e.getSource() == accountBackButton) {
             new AccountPanelFrame(customer);
             this.dispose();
+        }
+        if (e.getSource() == showPassword) {
+            if (showPassword.isSelected()) {
+                oldPasswordField.setEchoChar((char) 0);
+            } else {
+                oldPasswordField.setEchoChar('*');
+            }
         }
         if ((e.getSource() == submitButton) && !pinChanged) {
             boolean error = false;
@@ -145,7 +158,7 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
                 customer.setPassword(passwordConfirmField.getText());
                 Customer response = RESTClient.updateCustomer(customer);
                 if (response.getId() != 0) {
-                    customer=response;
+                    customer = response;
                     informationMessage.setVisible(false);
                     passwordChangedMassage.setVisible(true);
                     pinChanged = true;

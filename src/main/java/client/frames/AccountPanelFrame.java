@@ -180,5 +180,9 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
             new ChangePasswordFrame(customer);
             this.dispose();
         }
+        if (e.getSource() == createNewTransactionButton) {
+            new TransactionFrame(customer);
+            this.dispose();
+        }
     }
 }

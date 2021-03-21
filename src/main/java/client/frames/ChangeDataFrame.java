@@ -3,6 +3,7 @@ package client.frames;
 import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.entity.Customer;
+import client.utils.JTextFieldPlaceholder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,6 @@ import java.awt.event.ActionListener;
 public class ChangeDataFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Customer customer;
-    private Account account;
     private boolean dataChanged = false;
     Container container = getContentPane();
     JLabel welcomeTextLabel = new JLabel("Change personal data ");
@@ -20,8 +20,8 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
     JLabel customersLastName = new JLabel("Last name: ");
     JLabel informationMessage = new JLabel();
     JLabel dataChangedMassage = new JLabel();
-    JTextField customersNameField = new JTextField();
-    JTextField customersLastNameField = new JTextField();
+    JTextFieldPlaceholder customersNameField = new JTextFieldPlaceholder();
+    JTextFieldPlaceholder customersLastNameField = new JTextFieldPlaceholder();
     JButton resetButton = new JButton("Reset");
     JButton submitButton = new JButton("Submit");
     JButton accountBackButton = new JButton("Back to account");
@@ -29,7 +29,6 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
 
     public ChangeDataFrame(Customer customer) {
         this.customer = customer;
-        this.account = customer.getAccount();
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -74,6 +73,8 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
         informationMessage.setVisible(false);
         dataChangedMassage.setVisible(false);
         dataChangedMassage.setFont(new Font("INK Free", Font.BOLD, 20));
+        customersNameField.setText(customer.getFirstName());
+        customersLastNameField.setText(customer.getLastName());
     }
 
     public void addComponentsToContainer() {
@@ -124,7 +125,7 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
                 customer.setLastName(customersLastNameField.getText());
                 Customer response = RESTClient.updateCustomer(customer);
                 if (response.getId() != 0) {
-                    customer=response;
+                    customer = response;
                     informationMessage.setVisible(false);
                     dataChangedMassage.setVisible(true);
                     dataChanged = true;
