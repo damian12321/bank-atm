@@ -15,6 +15,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
     private Account account;
     private boolean pinChanged = false;
     private int oldPin;
+    private boolean isAdmin;
     Container container = getContentPane();
     JLabel welcomeTextLabel = new JLabel("Change your pin number ");
     JLabel infoAboutPin = new JLabel("Pin number will be used to the account transactions. Only digits allowed. It must be at least four digits long.");
@@ -36,13 +37,25 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         this.customer = customer;
         this.account = customer.getAccount();
         this.oldPin = account.getPinNumber();
+        this.isAdmin=false;
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
         setProperties();
         addComponentsToContainer();
         addActionEvent();
-
+    }
+    public ChangePinFrame(Customer customer,boolean isAdmin) {
+        this.customer = customer;
+        this.account = customer.getAccount();
+        this.oldPin = account.getPinNumber();
+        this.isAdmin=isAdmin;
+        setFrameManager();
+        setLayoutManager();
+        setLocationAndSize();
+        setProperties();
+        addComponentsToContainer();
+        addActionEvent();
     }
 
     public void setFrameManager() {
@@ -121,7 +134,12 @@ public class ChangePinFrame extends JFrame implements ActionListener {
             accountsPinConfirmField.setText("");
         }
         if (e.getSource() == accountBackButton) {
-            new AccountPanelFrame(customer);
+            if(!isAdmin) {
+                new AccountPanelFrame(customer);
+            }else
+            {
+                new AdminFrame();
+            }
             this.dispose();
         }
         if (e.getSource() == showPin) {

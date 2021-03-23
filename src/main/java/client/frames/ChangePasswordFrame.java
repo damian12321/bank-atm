@@ -15,6 +15,7 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
     private Account account;
     private boolean pinChanged = false;
     private String oldPwd;
+    private boolean isAdmin;
     Container container = getContentPane();
     JLabel welcomeTextLabel = new JLabel("Change your password ");
     JLabel oldPassword = new JLabel("Old password: ");
@@ -35,13 +36,25 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
         this.customer = customer;
         this.account = customer.getAccount();
         this.oldPwd = customer.getPassword();
+        this.isAdmin=false;
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
         setProperties();
         addComponentsToContainer();
         addActionEvent();
-
+    }
+    public ChangePasswordFrame(Customer customer,boolean isAdmin) {
+        this.customer = customer;
+        this.account = customer.getAccount();
+        this.oldPwd = customer.getPassword();
+        this.isAdmin=isAdmin;
+        setFrameManager();
+        setLayoutManager();
+        setLocationAndSize();
+        setProperties();
+        addComponentsToContainer();
+        addActionEvent();
     }
 
     public void setFrameManager() {
@@ -118,7 +131,12 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
             passwordConfirmField.setText("");
         }
         if (e.getSource() == accountBackButton) {
-            new AccountPanelFrame(customer);
+            if(!isAdmin) {
+                new AccountPanelFrame(customer);
+            }else
+            {
+                new AdminFrame();
+            }
             this.dispose();
         }
         if (e.getSource() == showPassword) {

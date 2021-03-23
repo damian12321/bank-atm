@@ -106,7 +106,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
             boolean error = false;
             String text = "";
 
-            if (userTextField.getText().isEmpty() || passwordField.getText().isEmpty()){
+            if (userTextField.getText().isEmpty() || passwordField.getText().isEmpty()) {
                 error = true;
                 text = "Data fields must not be empty.";
             }
@@ -116,15 +116,19 @@ public class LoginJFrame extends JFrame implements ActionListener {
                 informationMessage.setText(text);
                 informationMessage.setVisible(true);
             } else {
-                customer = RESTClient.getCustomer(Integer.parseInt(userTextField.getText()),passwordField.getText());
-                if(customer==null){
-                    informationMessage.setVisible(true);
-                    informationMessage.setText("The user name or password is incorrect.");
-                    informationMessage.setForeground(Color.red);
-                }else
-                {
-                   new AccountPanelFrame(customer);
-                   this.dispose();
+                if (userTextField.getText().equals("admin") && passwordField.getText().equals("admin")) {
+                    new AdminFrame();
+                    this.dispose();
+                } else {
+                    customer = RESTClient.getCustomer(Integer.parseInt(userTextField.getText()), passwordField.getText());
+                    if (customer == null) {
+                        informationMessage.setVisible(true);
+                        informationMessage.setText("The user name or password is incorrect.");
+                        informationMessage.setForeground(Color.red);
+                    } else {
+                        new AccountPanelFrame(customer);
+                        this.dispose();
+                    }
                 }
 
             }

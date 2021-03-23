@@ -2,6 +2,7 @@ package client.RESTClient;
 
 import client.entity.Account;
 import client.entity.Customer;
+import client.entity.Transaction;
 import client.exception.CustomExceptionHandler;
 import client.utils.DateDeserializer;
 import com.google.gson.*;
@@ -272,67 +273,95 @@ public class RESTClient {
         return customer;
     }
 
-    public static void getCustomers() throws IOException {
-        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/");
-        URLConnection urlConnection = url.openConnection();
-        HttpURLConnection con = (HttpURLConnection) urlConnection;
-        con.setRequestMethod("GET");
-        String userPass = "admin" + ":" + "admin";
-        String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
-        con.setRequestProperty("Authorization", basicAuth);
-        InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream());
-        Type listType = new TypeToken<ArrayList<Account>>() {
-        }.getType();
-        List<Account> list1 = new Gson().fromJson(inputStreamReader, listType);
-    }
-
-    public static void deleteCustomer() throws IOException {
-        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/22");
-        URLConnection urlConnection = url.openConnection();
-        HttpURLConnection con = (HttpURLConnection) urlConnection;
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestMethod("DELETE");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        String userPass = "admin" + ":" + "admin";
-        String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
-        con.setRequestProperty("Authorization", basicAuth);
-        StringBuilder response = null;
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-
+    public static List<Customer> getAllCustomers() {
+        List<Customer> list = null;
+        try {
+            URL url = new URL("http://localhost:8080/spring_bank_war/api/customer/");
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestMethod("GET");
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+            InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream());
+            Type listType = new TypeToken<ArrayList<Customer>>() {
+            }.getType();
+            list = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(inputStreamReader, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println(response.toString());
+        return list;
     }
 
-    public static void getTransactions(int accountNumber) throws IOException {
-        URL url = new URL("http://localhost:8080/spring_bank_war/api/account/22");
-        URLConnection urlConnection = url.openConnection();
-        HttpURLConnection con = (HttpURLConnection) urlConnection;
-        con.setRequestProperty("Content-Type", "application/json; utf-8");
-        con.setRequestMethod("DELETE");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        String userPass = "admin" + ":" + "admin";
-        String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
-        con.setRequestProperty("Authorization", basicAuth);
-        StringBuilder response = null;
-        try (BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), "utf-8"))) {
-            response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-
+    public static List<Account> getAllAccounts() {
+        List<Account> list = null;
+        try {
+            URL url = new URL("http://localhost:8080/spring_bank_war/api/account/");
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestMethod("GET");
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+            InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream());
+            Type listType = new TypeToken<ArrayList<Account>>() {
+            }.getType();
+            list = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(inputStreamReader, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        System.out.println(response.toString());
+        return list;
     }
 
+    public static List<Transaction> getAllTransactions() {
+        List<Transaction> list = null;
+        try {
+            URL url = new URL("http://localhost:8080/spring_bank_war/api/transaction/");
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestMethod("GET");
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+            InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream());
+            Type listType = new TypeToken<ArrayList<Transaction>>() {
+            }.getType();
+            list = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(inputStreamReader, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public static String delete(int id, String componentToDelete) {
+        String result = "";
+        try {
+            String urlString = "http://localhost:8080/spring_bank_war/api/" + componentToDelete + "/" + id;
+            URL url = new URL(urlString);
+            URLConnection urlConnection = url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) urlConnection;
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestMethod("DELETE");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+            String userPass = "admin" + ":" + "admin";
+            String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userPass.getBytes());
+            con.setRequestProperty("Authorization", basicAuth);
+            StringBuilder response = null;
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), "utf-8"))) {
+                response = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    response.append(responseLine.trim());
+                }
+                result = response.toString();
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }
