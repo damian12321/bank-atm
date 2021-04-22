@@ -123,7 +123,6 @@ public class RESTClient {
         String result = null;
         try {
             String urlString = "http://localhost:8080/spring_bank_war/api/transfer/" + fromAccount + "/" + pinNumber + "/" + destinationAccount + "/" + amount + "/";
-            System.out.println(urlString);
             URL url = new URL(urlString);
             URLConnection urlConnection = url.openConnection();
             HttpURLConnection con = (HttpURLConnection) urlConnection;
@@ -152,12 +151,12 @@ public class RESTClient {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            System.out.println(response.toString());
+
             if (100 <= con.getResponseCode() && con.getResponseCode() <= 399) {
                 result = response.toString();
-                System.out.println(response.toString());
+
             } else {
-                System.out.println(response.toString());
+
                 CustomExceptionHandler exception = new Gson().fromJson(response.toString(), CustomExceptionHandler.class);
                 result = exception.getMessage();
             }

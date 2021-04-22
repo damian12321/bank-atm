@@ -206,19 +206,19 @@ public class TransactionFrame extends JFrame implements ActionListener {
                 informationMessage.setText(text + "</html>");
                 informationMessage.setVisible(true);
             } else {
-                String response="";
+                String response = "";
                 if (transactionType == TransactionType.OUTGOING_TRANSFER) {
                     response = RESTClient.transferMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()),
                             Integer.parseInt(destinationField.getText()), Float.parseFloat(amountField.getText()), descriptionArea.getText());
                 }
                 if (transactionType == TransactionType.WITHDRAWAL) {
-                    response = RESTClient.withdrawMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()),Float.parseFloat(amountField.getText()));
+                    response = RESTClient.withdrawMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
                 if (transactionType == TransactionType.DEPOSIT) {
-                    response = RESTClient.depositMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()),Float.parseFloat(amountField.getText()));
+                    response = RESTClient.depositMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
 
-                if (response.startsWith("The money has been transferred")||response.startsWith("Withdrawal")||response.startsWith("Deposit")) {
+                if (response.startsWith("The money has been transferred") || response.startsWith("Withdrawal") || response.startsWith("Deposit")) {
                     informationMessage.setVisible(false);
                     dataChangedMassage.setVisible(true);
                     transactionCompleted = true;

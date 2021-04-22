@@ -370,12 +370,10 @@ public class AdminFrame extends JFrame implements ActionListener {
             changePasswordButton.setVisible(false);
             blockUnblockButton.setVisible(true);
             number = accountsBox.getSelectedIndex();
-            boolean tempBoolean=accountList.get(number).getIsActive();
-            if(tempBoolean)
-            {
+            boolean tempBoolean = accountList.get(number).getIsActive();
+            if (tempBoolean) {
                 blockUnblockButton.setText("Block");
-            }else
-            {
+            } else {
                 blockUnblockButton.setText("Unblock");
             }
 
@@ -402,21 +400,17 @@ public class AdminFrame extends JFrame implements ActionListener {
             new LoginJFrame();
             this.dispose();
         }
-        if(e.getSource()==blockUnblockButton)
-        {
-            boolean tempBoolean=accountList.get(number).getIsActive();
-            account=accountList.get(number);
-            for(Customer customer:customerList)
-            {
-                if(customer.getAccount().getId()==account.getId())
-                    this.customer=customer;
+        if (e.getSource() == blockUnblockButton) {
+            boolean tempBoolean = accountList.get(number).getIsActive();
+            account = accountList.get(number);
+            for (Customer customer : customerList) {
+                if (customer.getAccount().getId() == account.getId())
+                    this.customer = customer;
             }
             customer.setAccount(account);
-            if(tempBoolean)
-            {
+            if (tempBoolean) {
                 account.setIsActive(false);
-            }else
-            {
+            } else {
                 account.setIsActive(true);
             }
             RESTClient.updateCustomer(customer);
@@ -426,22 +420,22 @@ public class AdminFrame extends JFrame implements ActionListener {
         if (e.getSource() == changePinNumberButton) {
             String password1 = customerList.get(number).getPassword();
             int id = customerList.get(number).getId();
-            customer = RESTClient.getCustomer(id,password1);
-            new ChangePinFrame(customer,true);
+            customer = RESTClient.getCustomer(id, password1);
+            new ChangePinFrame(customer, true);
             this.dispose();
         }
         if (e.getSource() == changePersonalDataButton) {
             String password1 = customerList.get(number).getPassword();
             int id = customerList.get(number).getId();
-            customer = RESTClient.getCustomer(id,password1);
-            new ChangeDataFrame(customer,true);
+            customer = RESTClient.getCustomer(id, password1);
+            new ChangeDataFrame(customer, true);
             this.dispose();
         }
         if (e.getSource() == changePasswordButton) {
             String password1 = customerList.get(number).getPassword();
             int id = customerList.get(number).getId();
-            customer = RESTClient.getCustomer(id,password1);
-            new ChangePasswordFrame(customer,true);
+            customer = RESTClient.getCustomer(id, password1);
+            new ChangePasswordFrame(customer, true);
             this.dispose();
         }
         if (e.getSource() == deleteButton) {

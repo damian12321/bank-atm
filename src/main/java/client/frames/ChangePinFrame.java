@@ -37,7 +37,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         this.customer = customer;
         this.account = customer.getAccount();
         this.oldPin = account.getPinNumber();
-        this.isAdmin=false;
+        this.isAdmin = false;
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -45,11 +45,12 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         addComponentsToContainer();
         addActionEvent();
     }
-    public ChangePinFrame(Customer customer,boolean isAdmin) {
+
+    public ChangePinFrame(Customer customer, boolean isAdmin) {
         this.customer = customer;
         this.account = customer.getAccount();
         this.oldPin = account.getPinNumber();
-        this.isAdmin=isAdmin;
+        this.isAdmin = isAdmin;
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -134,10 +135,9 @@ public class ChangePinFrame extends JFrame implements ActionListener {
             accountsPinConfirmField.setText("");
         }
         if (e.getSource() == accountBackButton) {
-            if(!isAdmin) {
+            if (!isAdmin) {
                 new AccountPanelFrame(customer);
-            }else
-            {
+            } else {
                 new AdminFrame();
             }
             this.dispose();
@@ -188,7 +188,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
                 account.setPinNumber(Integer.parseInt(accountsPinField.getText()));
                 Customer response = RESTClient.updateCustomer(customer);
                 if (response.getId() != 0) {
-                    customer=response;
+                    customer = response;
                     informationMessage.setVisible(false);
                     pinChangedMassage.setVisible(true);
                     pinChanged = true;

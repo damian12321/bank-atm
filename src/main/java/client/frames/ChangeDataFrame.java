@@ -30,7 +30,7 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
 
     public ChangeDataFrame(Customer customer) {
         this.customer = customer;
-        isAdmin=false;
+        isAdmin = false;
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -38,10 +38,10 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
         addComponentsToContainer();
         addActionEvent();
     }
-    public ChangeDataFrame(Customer customer,boolean isAdmin)
-    {
+
+    public ChangeDataFrame(Customer customer, boolean isAdmin) {
         this.customer = customer;
-        this.isAdmin=isAdmin;
+        this.isAdmin = isAdmin;
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -116,10 +116,9 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
             customersLastNameField.setText("");
         }
         if (e.getSource() == accountBackButton) {
-            if(!isAdmin) {
+            if (!isAdmin) {
                 new AccountPanelFrame(customer);
-            }else
-            {
+            } else {
                 new AdminFrame();
             }
             this.dispose();
