@@ -36,7 +36,7 @@ Clone the repo from github:
 ```
 $ git clone https://github.com/damian12321/bank-client
 ```
-You can run the application on your favourite IDE by running src/main/java/clien/mainApp/BankClient.main
+You can run the application on your favourite IDE by running src/main/java/client/mainApp/BankClient.main
 or by command line in the application root folder.
 
 ```
