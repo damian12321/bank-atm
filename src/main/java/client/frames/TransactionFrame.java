@@ -207,14 +207,21 @@ public class TransactionFrame extends JFrame implements ActionListener {
                 informationMessage.setVisible(true);
             } else {
                 String response = "";
-                if (transactionType == TransactionType.OUTGOING_TRANSFER) {
-                    response = RESTClient.transferMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()),
-                            Integer.parseInt(destinationField.getText()), Float.parseFloat(amountField.getText()), descriptionArea.getText());
+                try {
+                    Float.parseFloat(amountField.getText());
+                }catch (NumberFormatException nfe)
+                {
+                    response="Amount field is incorrect.";
                 }
-                if (transactionType == TransactionType.WITHDRAWAL) {
+                if ((transactionType == TransactionType.OUTGOING_TRANSFER)&&response.isEmpty()) {
+                    response = RESTClient.transferMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()),
+                                Integer.parseInt(destinationField.getText()), Float.parseFloat(amountField.getText()), descriptionArea.getText());
+
+                }
+                if ((transactionType == TransactionType.WITHDRAWAL)&&response.isEmpty()) {
                     response = RESTClient.withdrawMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
-                if (transactionType == TransactionType.DEPOSIT) {
+                if ((transactionType == TransactionType.DEPOSIT)&&response.isEmpty()) {
                     response = RESTClient.depositMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
 
