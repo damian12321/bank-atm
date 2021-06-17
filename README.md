@@ -20,9 +20,8 @@ The administrator has access to all information in the bank such as customers an
 
 ## Technologies
 Project is created with:
-* Java 8
-* Maven 3
-* JUnit 5
+* Java
+* Maven
 
 ## Screenshots
 ![Screen1](./img/Screen1.png)

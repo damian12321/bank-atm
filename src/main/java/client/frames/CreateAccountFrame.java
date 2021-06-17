@@ -2,8 +2,6 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
-import client.entity.Customer;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class CreateAccountFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Customer customer;
     private Account account;
     private boolean customerAdded = false;
     Container container = getContentPane();
@@ -169,9 +166,9 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
                 informationMessage.setVisible(true);
             } else {
                 int accountNumber = RESTClient.getFreeAccountNumber();
-                account = new Account(accountNumber, Integer.parseInt(accountsPinField.getText()), 0);
-                customer = new Customer(customersNameField.getText(), customersLastNameField.getText(), account, passwordField.getText());
-                Customer response = RESTClient.createCustomer(customer);
+                account = new Account(customersNameField.getText(),customersLastNameField.getText(),passwordField.getText(),
+                        accountNumber,Integer.parseInt(accountsPinField.getText()));
+                Account response = RESTClient.createAccount(account);
                 if (response.getId() != 0) {
                     accountCreatedMessage.setVisible(true);
                     informationMessage.setVisible(false);

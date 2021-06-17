@@ -2,8 +2,6 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
-import client.entity.Customer;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class ChangePinFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Customer customer;
     private Account account;
     private boolean pinChanged = false;
     private int oldPin;
@@ -33,9 +30,8 @@ public class ChangePinFrame extends JFrame implements ActionListener {
     JButton accountBackButton = new JButton("Back to account");
 
 
-    public ChangePinFrame(Customer customer) {
-        this.customer = customer;
-        this.account = customer.getAccount();
+    public ChangePinFrame(Account account) {
+        this.account = account;
         this.oldPin = account.getPinNumber();
         this.isAdmin = false;
         setFrameManager();
@@ -46,9 +42,8 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         addActionEvent();
     }
 
-    public ChangePinFrame(Customer customer, boolean isAdmin) {
-        this.customer = customer;
-        this.account = customer.getAccount();
+    public ChangePinFrame(Account account, boolean isAdmin) {
+        this.account = account;
         this.oldPin = account.getPinNumber();
         this.isAdmin = isAdmin;
         setFrameManager();
@@ -136,7 +131,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         }
         if (e.getSource() == accountBackButton) {
             if (!isAdmin) {
-                new AccountPanelFrame(customer);
+                new AccountPanelFrame(account);
             } else {
                 new AdminFrame();
             }
@@ -186,9 +181,9 @@ public class ChangePinFrame extends JFrame implements ActionListener {
                 informationMessage.setVisible(true);
             } else {
                 account.setPinNumber(Integer.parseInt(accountsPinField.getText()));
-                Customer response = RESTClient.updateCustomer(customer);
+                Account response = RESTClient.updateAccount(account);
                 if (response.getId() != 0) {
-                    customer = response;
+                    account = response;
                     informationMessage.setVisible(false);
                     pinChangedMassage.setVisible(true);
                     pinChanged = true;

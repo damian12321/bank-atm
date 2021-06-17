@@ -2,7 +2,7 @@ package client.mainApp;
 
 import client.frames.LoginJFrame;
 
-public class BankClient {
+public class BankApplication {
     public static void main(String[] args) {
         new LoginJFrame();
     }

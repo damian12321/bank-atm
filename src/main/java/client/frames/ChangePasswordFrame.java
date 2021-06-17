@@ -2,8 +2,6 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
-import client.entity.Customer;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class ChangePasswordFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Customer customer;
     private Account account;
     private boolean pinChanged = false;
     private String oldPwd;
@@ -32,10 +29,9 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
     JButton accountBackButton = new JButton("Back to account");
 
 
-    public ChangePasswordFrame(Customer customer) {
-        this.customer = customer;
-        this.account = customer.getAccount();
-        this.oldPwd = customer.getPassword();
+    public ChangePasswordFrame(Account account) {
+        this.account = account;
+        this.oldPwd = account.getPassword();
         this.isAdmin = false;
         setFrameManager();
         setLayoutManager();
@@ -45,10 +41,9 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
         addActionEvent();
     }
 
-    public ChangePasswordFrame(Customer customer, boolean isAdmin) {
-        this.customer = customer;
-        this.account = customer.getAccount();
-        this.oldPwd = customer.getPassword();
+    public ChangePasswordFrame(Account account, boolean isAdmin) {
+        this.account = account;
+        this.oldPwd = account.getPassword();
         this.isAdmin = isAdmin;
         setFrameManager();
         setLayoutManager();
@@ -133,7 +128,7 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
         }
         if (e.getSource() == accountBackButton) {
             if (!isAdmin) {
-                new AccountPanelFrame(customer);
+                new AccountPanelFrame(account);
             } else {
                 new AdminFrame();
             }
@@ -173,10 +168,10 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
                 informationMessage.setText(text + "</html>");
                 informationMessage.setVisible(true);
             } else {
-                customer.setPassword(passwordConfirmField.getText());
-                Customer response = RESTClient.updateCustomer(customer);
+                account.setPassword(passwordConfirmField.getText());
+                Account response = RESTClient.updateAccount(account);
                 if (response.getId() != 0) {
-                    customer = response;
+                    account = response;
                     informationMessage.setVisible(false);
                     passwordChangedMassage.setVisible(true);
                     pinChanged = true;

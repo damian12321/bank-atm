@@ -1,9 +1,8 @@
 package client.frames;
 
+import client.RESTClient.RESTClient;
 import client.entity.Account;
-import client.entity.Customer;
 import client.entity.Transaction;
-
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -14,7 +13,6 @@ import java.util.List;
 
 public class AccountPanelFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Customer customer;
     private Account account;
     private List<Transaction> transactionList;
     Container container = getContentPane();
@@ -32,10 +30,9 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     JPanel tableLabel = new JPanel();
 
 
-    public AccountPanelFrame(Customer customer) {
-        this.customer = customer;
-        this.account = customer.getAccount();
-        this.transactionList = account.getTransactionList();
+    public AccountPanelFrame(Account account) {
+        this.account = account;
+        this.transactionList = RESTClient.getAccountTransactions(account);
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -79,7 +76,7 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
 
     public void setProperties() {
         welcomeTextLabel.setFont(new Font("INK Free", Font.BOLD, 20));
-        welcomeTextLabel.setText("Welcome " + customer.getFirstName() + " " + customer.getLastName());
+        welcomeTextLabel.setText("Welcome " + account.getFirstName() + " " + account.getLastName());
         balance.setText(account.getBalance() + " zł");
         accountNumber.setText(account.getAccountNumber() + "");
         transactionsInfo.setFont(new Font("INK Free", Font.BOLD, 20));
@@ -169,19 +166,19 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
             this.dispose();
         }
         if (e.getSource() == changePinNumberButton) {
-            new ChangePinFrame(customer);
+            new ChangePinFrame(account);
             this.dispose();
         }
         if (e.getSource() == changePersonalDataButton) {
-            new ChangeDataFrame(customer);
+            new ChangeDataFrame(account);
             this.dispose();
         }
         if (e.getSource() == changePasswordButton) {
-            new ChangePasswordFrame(customer);
+            new ChangePasswordFrame(account);
             this.dispose();
         }
         if (e.getSource() == createNewTransactionButton) {
-            new TransactionFrame(customer);
+            new TransactionFrame(account);
             this.dispose();
         }
     }

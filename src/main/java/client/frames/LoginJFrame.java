@@ -1,8 +1,7 @@
 package client.frames;
 
 import client.RESTClient.RESTClient;
-import client.entity.Customer;
-
+import client.entity.Account;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,7 +9,7 @@ import java.awt.event.ActionListener;
 
 public class LoginJFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Customer customer;
+    private Account account;
     Container container = getContentPane();
     JLabel welcomeTextLabel = new JLabel("Welcome in Damian's Bank, please login. ");
     JLabel accountIdLabel = new JLabel("Customer id: ");
@@ -120,13 +119,13 @@ public class LoginJFrame extends JFrame implements ActionListener {
                     new AdminFrame();
                     this.dispose();
                 } else {
-                    customer = RESTClient.getCustomer(Integer.parseInt(userTextField.getText()), passwordField.getText());
-                    if (customer == null) {
+                    account = RESTClient.getAccount(Integer.parseInt(userTextField.getText()), passwordField.getText());
+                    if (account == null) {
                         informationMessage.setVisible(true);
                         informationMessage.setText("The user name or password is incorrect.");
                         informationMessage.setForeground(Color.red);
                     } else {
-                        new AccountPanelFrame(customer);
+                        new AccountPanelFrame(account);
                         this.dispose();
                     }
                 }

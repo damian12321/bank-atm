@@ -2,9 +2,7 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
-import client.entity.Customer;
 import client.utils.JTextFieldPlaceholder;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +10,7 @@ import java.awt.event.ActionListener;
 
 public class ChangeDataFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Customer customer;
+    private Account account;
     private boolean dataChanged = false;
     private boolean isAdmin;
     Container container = getContentPane();
@@ -28,8 +26,8 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
     JButton accountBackButton = new JButton("Back to account");
 
 
-    public ChangeDataFrame(Customer customer) {
-        this.customer = customer;
+    public ChangeDataFrame(Account account) {
+        this.account = account;
         isAdmin = false;
         setFrameManager();
         setLayoutManager();
@@ -39,8 +37,8 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
         addActionEvent();
     }
 
-    public ChangeDataFrame(Customer customer, boolean isAdmin) {
-        this.customer = customer;
+    public ChangeDataFrame(Account account, boolean isAdmin) {
+        this.account = account;
         this.isAdmin = isAdmin;
         setFrameManager();
         setLayoutManager();
@@ -85,8 +83,8 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
         informationMessage.setVisible(false);
         dataChangedMassage.setVisible(false);
         dataChangedMassage.setFont(new Font("INK Free", Font.BOLD, 20));
-        customersNameField.setText(customer.getFirstName());
-        customersLastNameField.setText(customer.getLastName());
+        customersNameField.setText(account.getFirstName());
+        customersLastNameField.setText(account.getLastName());
     }
 
     public void addComponentsToContainer() {
@@ -117,7 +115,7 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
         }
         if (e.getSource() == accountBackButton) {
             if (!isAdmin) {
-                new AccountPanelFrame(customer);
+                new AccountPanelFrame(account);
             } else {
                 new AdminFrame();
             }
@@ -137,11 +135,13 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
                 informationMessage.setText(text + "</html>");
                 informationMessage.setVisible(true);
             } else {
-                customer.setFirstName(customersNameField.getText());
-                customer.setLastName(customersLastNameField.getText());
-                Customer response = RESTClient.updateCustomer(customer);
+                account.setFirstName(customersNameField.getText());
+                account.setLastName(customersLastNameField.getText());
+                Account response = RESTClient.updateAccount(account);
+
                 if (response.getId() != 0) {
-                    customer = response;
+                    System.out.println(response);
+                    account = response;
                     informationMessage.setVisible(false);
                     dataChangedMassage.setVisible(true);
                     dataChanged = true;

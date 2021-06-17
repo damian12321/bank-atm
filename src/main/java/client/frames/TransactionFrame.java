@@ -2,9 +2,7 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
-import client.entity.Customer;
 import client.enums.TransactionType;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +10,6 @@ import java.awt.event.ActionListener;
 
 public class TransactionFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Customer customer;
     private Account account;
     private boolean transactionCompleted = false;
     private TransactionType transactionType;
@@ -39,9 +36,8 @@ public class TransactionFrame extends JFrame implements ActionListener {
     ButtonGroup typeGroup = new ButtonGroup();
 
 
-    public TransactionFrame(Customer customer) {
-        this.customer = customer;
-        this.account = customer.getAccount();
+    public TransactionFrame(Account account) {
+        this.account = account;
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -182,8 +178,8 @@ public class TransactionFrame extends JFrame implements ActionListener {
             descriptionArea.setVisible(true);
         }
         if (e.getSource() == accountBackButton) {
-            customer = RESTClient.getCustomer(customer.getId(), customer.getPassword());
-            new AccountPanelFrame(customer);
+            account = RESTClient.getAccount(account.getId(), account.getPassword());
+            new AccountPanelFrame(account);
             this.dispose();
         }
         if ((e.getSource() == submitButton) && !transactionCompleted) {

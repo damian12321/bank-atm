@@ -2,7 +2,6 @@ package client.entity;
 
 import client.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.util.Date;
 import java.util.Objects;
 
@@ -14,24 +13,6 @@ public class Transaction {
     @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss")
     private Date date;
     private String description;
-
-    public Transaction() {
-    }
-
-    public Transaction(TransactionType transactionType, float amount, Date date, String description) {
-        this.transactionType = transactionType;
-        this.date = date;
-        this.description = description;
-        this.amount = amount;
-    }
-
-    public Transaction(int id, TransactionType transactionType, float amount, Date date, String description) {
-        this.id = id;
-        this.transactionType = transactionType;
-        this.date = date;
-        this.description = description;
-        this.amount = amount;
-    }
 
     public String getDescription() {
         return description;
