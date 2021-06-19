@@ -2,6 +2,8 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
+import client.utils.FrameSetup;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,22 +13,22 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Account account;
     private boolean pinChanged = false;
-    private String oldPwd;
-    private boolean isAdmin;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel("Change your password ");
-    JLabel oldPassword = new JLabel("Old password: ");
-    JLabel customersPassword = new JLabel("Password: ");
-    JLabel customersPasswordConfirm = new JLabel("Password confirm: ");
-    JLabel informationMessage = new JLabel();
-    JLabel passwordChangedMassage = new JLabel();
-    JPasswordField oldPasswordField = new JPasswordField();
-    JPasswordField passwordField = new JPasswordField();
-    JPasswordField passwordConfirmField = new JPasswordField();
-    JCheckBox showPassword = new JCheckBox("Show Password");
-    JButton resetButton = new JButton("Reset");
-    JButton submitButton = new JButton("Submit");
-    JButton accountBackButton = new JButton("Back to account");
+    private final String oldPwd;
+    private final boolean isAdmin;
+    private final Container container = getContentPane();
+    private final JLabel welcomeTextLabel = new JLabel("Change your password ");
+    private final JLabel oldPassword = new JLabel("Old password: ");
+    private final JLabel customersPassword = new JLabel("Password: ");
+    private final JLabel customersPasswordConfirm = new JLabel("Password confirm: ");
+    private final JLabel informationMessage = new JLabel();
+    private final JLabel passwordChangedMassage = new JLabel();
+    private final JPasswordField oldPasswordField = new JPasswordField();
+    private final JPasswordField passwordField = new JPasswordField();
+    private final JPasswordField passwordConfirmField = new JPasswordField();
+    private final JCheckBox showPassword = new JCheckBox("Show Password");
+    private final JButton resetButton = new JButton("Reset");
+    private final JButton submitButton = new JButton("Submit");
+    private final JButton accountBackButton = new JButton("Back to account");
 
 
     public ChangePasswordFrame(Account account) {
@@ -54,16 +56,7 @@ public class ChangePasswordFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCordX = (objDimension.width - this.getWidth()) / 2;
-        int iCordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {

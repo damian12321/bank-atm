@@ -2,6 +2,8 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
+import client.utils.FrameSetup;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,18 +12,18 @@ import java.awt.event.ActionListener;
 public class LoginJFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Account account;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel("Welcome in Damian's Bank, please login. ");
-    JLabel accountIdLabel = new JLabel("Customer id: ");
-    JLabel passwordLabel = new JLabel("Password: ");
-    JTextField userTextField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-    JButton loginButton = new JButton("Login");
-    JButton resetButton = new JButton("Reset");
-    JButton createAccountButton = new JButton("Create new account");
-    JButton exitAppButton = new JButton("Exit");
-    JCheckBox showPassword = new JCheckBox("Show Password");
-    JLabel informationMessage = new JLabel();
+    private final Container container = getContentPane();
+    private final JLabel welcomeTextLabel = new JLabel("Welcome in Damian's Bank, please login. ");
+    private final JLabel accountIdLabel = new JLabel("Customer id: ");
+    private final JLabel passwordLabel = new JLabel("Password: ");
+    private final JTextField userTextField = new JTextField();
+    private final JPasswordField passwordField = new JPasswordField();
+    private final JButton loginButton = new JButton("Login");
+    private final JButton resetButton = new JButton("Reset");
+    private final JButton createAccountButton = new JButton("Create new account");
+    private final JButton exitAppButton = new JButton("Exit");
+    private final JCheckBox showPassword = new JCheckBox("Show Password");
+    private final JLabel informationMessage = new JLabel();
 
 
     public LoginJFrame() {
@@ -35,16 +37,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCoordX = (objDimension.width - this.getWidth()) / 2;
-        int iCoordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCoordX, iCoordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {

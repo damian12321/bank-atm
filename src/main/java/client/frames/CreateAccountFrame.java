@@ -2,6 +2,8 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
+import client.utils.FrameSetup;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,26 +13,26 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Account account;
     private boolean customerAdded = false;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel("Create new account");
-    JLabel infoAboutPin = new JLabel("Pin number will be used to the account transactions. Only digits allowed. It must be at least four digits long.");
-    JLabel customersName = new JLabel("First name: ");
-    JLabel customersLastName = new JLabel("Last name: ");
-    JLabel customersPassword = new JLabel("Password: ");
-    JLabel customersPasswordConfirm = new JLabel("Password confirm: ");
-    JLabel accountsPin = new JLabel("Pin number: ");
-    JLabel accountsPinConfirm = new JLabel("Pin number confirm: ");
-    JLabel informationMessage = new JLabel();
-    JLabel accountCreatedMessage = new JLabel();
-    JTextField customersNameField = new JTextField();
-    JTextField customersLastNameField = new JTextField();
-    JPasswordField passwordField = new JPasswordField();
-    JPasswordField passwordConfirmField = new JPasswordField();
-    JPasswordField accountsPinField = new JPasswordField();
-    JPasswordField accountsPinConfirmField = new JPasswordField();
-    JButton resetButton = new JButton("Reset");
-    JButton createAccountButton = new JButton("Create account");
-    JButton loginBackButton = new JButton("Back to login page");
+    private final Container container = getContentPane();
+    private final JLabel welcomeTextLabel = new JLabel("Create new account");
+    private final JLabel infoAboutPin = new JLabel("Pin number will be used to the account transactions. Only digits allowed. It must be at least four digits long.");
+    private final JLabel customersName = new JLabel("First name: ");
+    private final JLabel customersLastName = new JLabel("Last name: ");
+    private final JLabel customersPassword = new JLabel("Password: ");
+    private final JLabel customersPasswordConfirm = new JLabel("Password confirm: ");
+    private final JLabel accountsPin = new JLabel("Pin number: ");
+    private final JLabel accountsPinConfirm = new JLabel("Pin number confirm: ");
+    private final JLabel informationMessage = new JLabel();
+    private final JLabel accountCreatedMessage = new JLabel();
+    private final JTextField customersNameField = new JTextField();
+    private final JTextField customersLastNameField = new JTextField();
+    private final JPasswordField passwordField = new JPasswordField();
+    private final JPasswordField passwordConfirmField = new JPasswordField();
+    private final JPasswordField accountsPinField = new JPasswordField();
+    private final JPasswordField accountsPinConfirmField = new JPasswordField();
+    private final JButton resetButton = new JButton("Reset");
+    private final JButton createAccountButton = new JButton("Create account");
+    private final JButton loginBackButton = new JButton("Back to login page");
 
 
     public CreateAccountFrame() {
@@ -44,16 +46,7 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCordX = (objDimension.width - this.getWidth()) / 2;
-        int iCordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {
@@ -166,8 +159,8 @@ public class CreateAccountFrame extends JFrame implements ActionListener {
                 informationMessage.setVisible(true);
             } else {
                 int accountNumber = RESTClient.getFreeAccountNumber();
-                account = new Account(customersNameField.getText(),customersLastNameField.getText(),passwordField.getText(),
-                        accountNumber,Integer.parseInt(accountsPinField.getText()));
+                account = new Account(customersNameField.getText(), customersLastNameField.getText(), passwordField.getText(),
+                        accountNumber, Integer.parseInt(accountsPinField.getText()));
                 Account response = RESTClient.createAccount(account);
                 if (response.getId() != 0) {
                     accountCreatedMessage.setVisible(true);

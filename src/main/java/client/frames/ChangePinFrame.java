@@ -2,6 +2,8 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
+import client.utils.FrameSetup;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,23 +13,23 @@ public class ChangePinFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Account account;
     private boolean pinChanged = false;
-    private int oldPin;
-    private boolean isAdmin;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel("Change your pin number ");
-    JLabel infoAboutPin = new JLabel("Pin number will be used to the account transactions. Only digits allowed. It must be at least four digits long.");
-    JLabel oldPinNumber = new JLabel("Old pin number: ");
-    JLabel accountsPin = new JLabel("Pin number: ");
-    JLabel accountsPinConfirm = new JLabel("Pin number confirm: ");
-    JLabel informationMessage = new JLabel();
-    JLabel pinChangedMassage = new JLabel();
-    JPasswordField oldPinNumberField = new JPasswordField();
-    JPasswordField accountsPinField = new JPasswordField();
-    JPasswordField accountsPinConfirmField = new JPasswordField();
-    JCheckBox showPin = new JCheckBox("Show Pin");
-    JButton resetButton = new JButton("Reset");
-    JButton submitButton = new JButton("Submit");
-    JButton accountBackButton = new JButton("Back to account");
+    private final int oldPin;
+    private final boolean isAdmin;
+    private final Container container = getContentPane();
+    private final JLabel welcomeTextLabel = new JLabel("Change your pin number ");
+    private final JLabel infoAboutPin = new JLabel("Pin number will be used to the account transactions. Only digits allowed. It must be at least four digits long.");
+    private final JLabel oldPinNumber = new JLabel("Old pin number: ");
+    private final JLabel accountsPin = new JLabel("Pin number: ");
+    private final JLabel accountsPinConfirm = new JLabel("Pin number confirm: ");
+    private final JLabel informationMessage = new JLabel();
+    private final JLabel pinChangedMassage = new JLabel();
+    private final JPasswordField oldPinNumberField = new JPasswordField();
+    private final JPasswordField accountsPinField = new JPasswordField();
+    private final JPasswordField accountsPinConfirmField = new JPasswordField();
+    private final JCheckBox showPin = new JCheckBox("Show Pin");
+    private final JButton resetButton = new JButton("Reset");
+    private final JButton submitButton = new JButton("Submit");
+    private final JButton accountBackButton = new JButton("Back to account");
 
 
     public ChangePinFrame(Account account) {
@@ -55,16 +57,7 @@ public class ChangePinFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCordX = (objDimension.width - this.getWidth()) / 2;
-        int iCordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {

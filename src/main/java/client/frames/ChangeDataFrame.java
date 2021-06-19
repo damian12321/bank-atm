@@ -2,7 +2,9 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
+import client.utils.FrameSetup;
 import client.utils.JTextFieldPlaceholder;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,18 +14,18 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Account account;
     private boolean dataChanged = false;
-    private boolean isAdmin;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel("Change personal data ");
-    JLabel customersName = new JLabel("First name: ");
-    JLabel customersLastName = new JLabel("Last name: ");
-    JLabel informationMessage = new JLabel();
-    JLabel dataChangedMassage = new JLabel();
-    JTextFieldPlaceholder customersNameField = new JTextFieldPlaceholder();
-    JTextFieldPlaceholder customersLastNameField = new JTextFieldPlaceholder();
-    JButton resetButton = new JButton("Reset");
-    JButton submitButton = new JButton("Submit");
-    JButton accountBackButton = new JButton("Back to account");
+    private final boolean isAdmin;
+    private final Container container = getContentPane();
+    private final JLabel welcomeTextLabel = new JLabel("Change personal data ");
+    private final JLabel customersName = new JLabel("First name: ");
+    private final JLabel customersLastName = new JLabel("Last name: ");
+    private final JLabel informationMessage = new JLabel();
+    private final JLabel dataChangedMassage = new JLabel();
+    private final JTextFieldPlaceholder customersNameField = new JTextFieldPlaceholder();
+    private final JTextFieldPlaceholder customersLastNameField = new JTextFieldPlaceholder();
+    private final JButton resetButton = new JButton("Reset");
+    private final JButton submitButton = new JButton("Submit");
+    private final JButton accountBackButton = new JButton("Back to account");
 
 
     public ChangeDataFrame(Account account) {
@@ -49,16 +51,7 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCordX = (objDimension.width - this.getWidth()) / 2;
-        int iCordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {
@@ -140,7 +133,6 @@ public class ChangeDataFrame extends JFrame implements ActionListener {
                 Account response = RESTClient.updateAccount(account);
 
                 if (response.getId() != 0) {
-                    System.out.println(response);
                     account = response;
                     informationMessage.setVisible(false);
                     dataChangedMassage.setVisible(true);

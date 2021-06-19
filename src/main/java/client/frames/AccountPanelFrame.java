@@ -3,6 +3,7 @@ package client.frames;
 import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.entity.Transaction;
+import client.utils.FrameSetup;
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -13,21 +14,21 @@ import java.util.List;
 
 public class AccountPanelFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
-    private Account account;
-    private List<Transaction> transactionList;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel();
-    JLabel balanceInfo = new JLabel("Your balance: ");
-    JLabel balance = new JLabel();
-    JLabel accountNumberInfo = new JLabel("Your account number: ");
-    JLabel accountNumber = new JLabel();
-    JLabel transactionsInfo = new JLabel("Your last transactions");
-    JButton createNewTransactionButton = new JButton("New transaction");
-    JButton logoutBackButton = new JButton("Logout");
-    JButton changePersonalDataButton = new JButton("Change personal data");
-    JButton changePasswordButton = new JButton("Change password");
-    JButton changePinNumberButton = new JButton("Change pin number");
-    JPanel tableLabel = new JPanel();
+    private final Account account;
+    private final List<Transaction> transactionList;
+    private final Container container = getContentPane();
+    private final  JLabel welcomeTextLabel = new JLabel();
+    private final JLabel balanceInfo = new JLabel("Your balance: ");
+    private final JLabel balance = new JLabel();
+    private final JLabel accountNumberInfo = new JLabel("Your account number: ");
+    private final JLabel accountNumber = new JLabel();
+    private final JLabel transactionsInfo = new JLabel("Your last transactions");
+    private final JButton createNewTransactionButton = new JButton("New transaction");
+    private final JButton logoutBackButton = new JButton("Logout");
+    private final JButton changePersonalDataButton = new JButton("Change personal data");
+    private final JButton changePasswordButton = new JButton("Change password");
+    private final JButton changePinNumberButton = new JButton("Change pin number");
+    private final JPanel tableLabel = new JPanel();
 
 
     public AccountPanelFrame(Account account) {
@@ -43,16 +44,7 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCordX = (objDimension.width - this.getWidth()) / 2;
-        int iCordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {

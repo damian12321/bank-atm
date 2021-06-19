@@ -3,6 +3,7 @@ package client.frames;
 import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.entity.Transaction;
+import client.utils.FrameSetup;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -16,30 +17,30 @@ import java.util.List;
 public class AdminFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Account account;
-    private List<Transaction> transactionList;
-    private List<Account> accountList;
+    private final List<Transaction> transactionList;
+    private final List<Account> accountList;
     private int number;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel("Admin panel");
-    JLabel listLabel = new JLabel("Last transactions");
-    JLabel tableViewLabel = new JLabel("Select a table view ");
-    JLabel numberLabel = new JLabel();
-    JButton logoutBackButton = new JButton("Logout");
-    JButton changePersonalDataButton = new JButton("Change personal data");
-    JButton changePasswordButton = new JButton("Change password");
-    JButton changePinNumberButton = new JButton("Change pin number");
-    JButton deleteButton = new JButton("Delete");
-    JButton blockUnblockButton = new JButton();
-    JPanel transactionsTableLabel;
-    JPanel accountsTableLabel;
-    JPanel accountsPersonalInfoTableLabel;
-    JRadioButton transactionsButton = new JRadioButton("Transactions");
-    JRadioButton accountsButton = new JRadioButton("Account info");
-    JRadioButton accountsPersonalInfoButton = new JRadioButton("Personal info");
-    ButtonGroup typeGroup = new ButtonGroup();
-    JComboBox<Integer> accountsBox = new JComboBox<>();
-    JComboBox<Integer> transactionsBox = new JComboBox<>();
-    JComboBox<Integer> accountsPersonalInfoBox = new JComboBox<>();
+    private final Container container = getContentPane();
+    private final JLabel welcomeTextLabel = new JLabel("Admin panel");
+    private final JLabel listLabel = new JLabel("Last transactions");
+    private final JLabel tableViewLabel = new JLabel("Select a table view ");
+    private final JLabel numberLabel = new JLabel();
+    private final JButton logoutBackButton = new JButton("Logout");
+    private final JButton changePersonalDataButton = new JButton("Change personal data");
+    private final JButton changePasswordButton = new JButton("Change password");
+    private final JButton changePinNumberButton = new JButton("Change pin number");
+    private final JButton deleteButton = new JButton("Delete");
+    private final JButton blockUnblockButton = new JButton();
+    private JPanel transactionsTableLabel;
+    private JPanel accountsTableLabel;
+    private JPanel accountsPersonalInfoTableLabel;
+    private final JRadioButton transactionsButton = new JRadioButton("Transactions");
+    private final JRadioButton accountsButton = new JRadioButton("Account info");
+    private final JRadioButton accountsPersonalInfoButton = new JRadioButton("Personal info");
+    private final ButtonGroup typeGroup = new ButtonGroup();
+    private final JComboBox<Integer> accountsBox = new JComboBox<>();
+    private final JComboBox<Integer> transactionsBox = new JComboBox<>();
+    private final JComboBox<Integer> accountsPersonalInfoBox = new JComboBox<>();
 
 
     public AdminFrame() {
@@ -58,16 +59,7 @@ public class AdminFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCordX = (objDimension.width - this.getWidth()) / 2;
-        int iCordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {

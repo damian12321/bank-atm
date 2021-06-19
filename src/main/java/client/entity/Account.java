@@ -2,10 +2,12 @@ package client.entity;
 
 
 import lombok.Data;
+
 import java.util.List;
 
 @Data
 public class Account {
+
     private int id;
     private String firstName;
     private String lastName;
@@ -16,8 +18,8 @@ public class Account {
     private int loginAttempts;
     private boolean isActive;
     private List<Transaction> transactionList;
-    public boolean getIsActive()
-    {
+
+    public boolean getIsActive() {
         return isActive;
     }
 
@@ -32,9 +34,8 @@ public class Account {
         this.isActive = true;
     }
 
-    public void setIsActive(boolean isActive)
-    {
-        this.isActive=isActive;
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
 }

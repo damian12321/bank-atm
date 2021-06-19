@@ -3,6 +3,7 @@ package client.frames;
 import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.enums.TransactionType;
+import client.utils.FrameSetup;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,27 +14,27 @@ public class TransactionFrame extends JFrame implements ActionListener {
     private Account account;
     private boolean transactionCompleted = false;
     private TransactionType transactionType;
-    Container container = getContentPane();
-    JLabel welcomeTextLabel = new JLabel("New transaction ");
-    JLabel transactionTypeLabel = new JLabel("Choose transaction type ");
-    JLabel amountLabel = new JLabel("Amount: ");
-    JLabel accountDestinationLabel = new JLabel("Enter a destination account number: ");
-    JLabel informationMessage = new JLabel();
-    JLabel dataChangedMassage = new JLabel();
-    JLabel accountsPin = new JLabel("Pin number: ");
-    JLabel descriptionLabel = new JLabel("Description: ");
-    JPasswordField pinNumberField = new JPasswordField();
-    JTextArea descriptionArea = new JTextArea();
-    JTextField destinationField = new JTextField();
-    JTextField amountField = new JTextField();
-    JCheckBox showPin = new JCheckBox("Show Pin");
-    JButton resetButton = new JButton("Reset");
-    JButton submitButton = new JButton("Submit");
-    JButton accountBackButton = new JButton("Back to account");
-    JRadioButton withdrawButton = new JRadioButton("Withdraw");
-    JRadioButton depositButton = new JRadioButton("Deposit");
-    JRadioButton transferButton = new JRadioButton("Transfer");
-    ButtonGroup typeGroup = new ButtonGroup();
+    private final Container container = getContentPane();
+    private final JLabel welcomeTextLabel = new JLabel("New transaction ");
+    private final JLabel transactionTypeLabel = new JLabel("Choose transaction type ");
+    private final JLabel amountLabel = new JLabel("Amount: ");
+    private final JLabel accountDestinationLabel = new JLabel("Enter a destination account number: ");
+    private final JLabel informationMessage = new JLabel();
+    private final JLabel dataChangedMassage = new JLabel();
+    private final JLabel accountsPin = new JLabel("Pin number: ");
+    private final JLabel descriptionLabel = new JLabel("Description: ");
+    private final JPasswordField pinNumberField = new JPasswordField();
+    private final JTextArea descriptionArea = new JTextArea();
+    private final JTextField destinationField = new JTextField();
+    private final JTextField amountField = new JTextField();
+    private final JCheckBox showPin = new JCheckBox("Show Pin");
+    private final JButton resetButton = new JButton("Reset");
+    private final JButton submitButton = new JButton("Submit");
+    private final JButton accountBackButton = new JButton("Back to account");
+    private final JRadioButton withdrawButton = new JRadioButton("Withdraw");
+    private final JRadioButton depositButton = new JRadioButton("Deposit");
+    private final JRadioButton transferButton = new JRadioButton("Transfer");
+    private final ButtonGroup typeGroup = new ButtonGroup();
 
 
     public TransactionFrame(Account account) {
@@ -48,16 +49,7 @@ public class TransactionFrame extends JFrame implements ActionListener {
     }
 
     public void setFrameManager() {
-        this.setTitle("Damian's Bank");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setSize(new Dimension(800, 700));
-        Dimension objDimension = Toolkit.getDefaultToolkit().getScreenSize();
-        int iCordX = (objDimension.width - this.getWidth()) / 2;
-        int iCordY = (objDimension.height - this.getHeight()) / 2;
-        this.setLocation(iCordX, iCordY);
-        this.getContentPane().setBackground(COLOR);
-        this.setResizable(false);
-        this.setVisible(true);
+        FrameSetup.setupFrame(this);
     }
 
     public void setLayoutManager() {
@@ -205,19 +197,18 @@ public class TransactionFrame extends JFrame implements ActionListener {
                 String response = "";
                 try {
                     Float.parseFloat(amountField.getText());
-                }catch (NumberFormatException nfe)
-                {
-                    response="Amount field is incorrect.";
+                } catch (NumberFormatException nfe) {
+                    response = "Amount field is incorrect.";
                 }
-                if ((transactionType == TransactionType.OUTGOING_TRANSFER)&&response.isEmpty()) {
+                if ((transactionType == TransactionType.OUTGOING_TRANSFER) && response.isEmpty()) {
                     response = RESTClient.transferMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()),
-                                Integer.parseInt(destinationField.getText()), Float.parseFloat(amountField.getText()), descriptionArea.getText());
+                            Integer.parseInt(destinationField.getText()), Float.parseFloat(amountField.getText()), descriptionArea.getText());
 
                 }
-                if ((transactionType == TransactionType.WITHDRAWAL)&&response.isEmpty()) {
+                if ((transactionType == TransactionType.WITHDRAWAL) && response.isEmpty()) {
                     response = RESTClient.withdrawMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
-                if ((transactionType == TransactionType.DEPOSIT)&&response.isEmpty()) {
+                if ((transactionType == TransactionType.DEPOSIT) && response.isEmpty()) {
                     response = RESTClient.depositMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
 
@@ -228,7 +219,7 @@ public class TransactionFrame extends JFrame implements ActionListener {
                     dataChangedMassage.setText(response);
                     dataChangedMassage.setForeground(Color.green);
                 } else {
-                    if (response.startsWith("Account with number " + account.getAccountNumber() + " is not active.")) {
+                    if (response.equals("Account with number " + account.getAccountNumber() + " is not active.")) {
                         JOptionPane.showMessageDialog(this, "Your account is not active, please contact with the support.");
                     }
                     informationMessage.setVisible(true);

@@ -3,7 +3,7 @@ package client.utils;
 import javax.swing.*;
 import java.awt.*;
 
-@SuppressWarnings("serial")
+
 public class JTextFieldPlaceholder extends JTextField {
 
     private String ph;
