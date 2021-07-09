@@ -20,7 +20,6 @@ public class LoginJFrame extends JFrame implements ActionListener {
     private final JPasswordField passwordField = new JPasswordField();
     private final JButton loginButton = new JButton("Login");
     private final JButton resetButton = new JButton("Reset");
-    private final JButton createAccountButton = new JButton("Create new account");
     private final JButton exitAppButton = new JButton("Exit");
     private final JCheckBox showPassword = new JCheckBox("Show Password");
     private final JLabel informationMessage = new JLabel();
@@ -53,8 +52,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
         showPassword.setBounds(350, 250, 150, 30);
         loginButton.setBounds(250, 300, 100, 30);
         resetButton.setBounds(400, 300, 100, 30);
-        createAccountButton.setBounds(450, 550, 200, 30);
-        exitAppButton.setBounds(150, 550, 200, 30);
+        exitAppButton.setBounds(280, 550, 200, 30);
         informationMessage.setBounds(250, 320, 300, 100);
         informationMessage.setVisible(false);
 
@@ -74,7 +72,6 @@ public class LoginJFrame extends JFrame implements ActionListener {
         container.add(showPassword);
         container.add(loginButton);
         container.add(resetButton);
-        container.add(createAccountButton);
         container.add(exitAppButton);
         container.add(informationMessage);
     }
@@ -83,7 +80,6 @@ public class LoginJFrame extends JFrame implements ActionListener {
         loginButton.addActionListener(this);
         resetButton.addActionListener(this);
         showPassword.addActionListener(this);
-        createAccountButton.addActionListener(this);
         exitAppButton.addActionListener(this);
     }
 
@@ -108,11 +104,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
                 informationMessage.setText(text);
                 informationMessage.setVisible(true);
             } else {
-                if (userTextField.getText().equals("admin") && passwordField.getText().equals("admin")) {
-                    new AdminFrame();
-                    this.dispose();
-                } else {
-                    account = RESTClient.getAccount(Integer.parseInt(userTextField.getText()), passwordField.getText());
+                account = RESTClient.getAccount(Integer.parseInt(userTextField.getText()), passwordField.getText());
                     if (account == null) {
                         informationMessage.setVisible(true);
                         informationMessage.setText("The user name or password is incorrect.");
@@ -124,8 +116,6 @@ public class LoginJFrame extends JFrame implements ActionListener {
                 }
 
             }
-
-        }
         if (e.getSource() == resetButton) {
             userTextField.setText("");
             passwordField.setText("");
@@ -136,10 +126,6 @@ public class LoginJFrame extends JFrame implements ActionListener {
             } else {
                 passwordField.setEchoChar('*');
             }
-        }
-        if (e.getSource() == createAccountButton) {
-            new CreateAccountFrame();
-            this.dispose();
         }
     }
 

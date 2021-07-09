@@ -25,8 +25,6 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     private final JLabel transactionsInfo = new JLabel("Your last transactions");
     private final JButton createNewTransactionButton = new JButton("New transaction");
     private final JButton logoutBackButton = new JButton("Logout");
-    private final JButton changePersonalDataButton = new JButton("Change personal data");
-    private final JButton changePasswordButton = new JButton("Change password");
     private final JButton changePinNumberButton = new JButton("Change pin number");
     private final JPanel tableLabel = new JPanel();
 
@@ -52,7 +50,7 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     }
 
     public void setLocationAndSize() {
-        welcomeTextLabel.setBounds(250, 20, 400, 30);
+        welcomeTextLabel.setBounds(275, 20, 400, 30);
         createNewTransactionButton.setBounds(450, 550, 200, 30);
         logoutBackButton.setBounds(150, 550, 200, 30);
         balanceInfo.setBounds(100, 120, 400, 30);
@@ -61,9 +59,7 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
         accountNumber.setBounds(250, 170, 400, 30);
         tableLabel.setBounds(0, 250, 800, 300);
         transactionsInfo.setBounds(260, 220, 400, 30);
-        changePersonalDataButton.setBounds(80, 60, 200, 30);
-        changePasswordButton.setBounds(300, 60, 200, 30);
-        changePinNumberButton.setBounds(520, 60, 200, 30);
+        changePinNumberButton.setBounds(300, 60, 200, 30);
     }
 
     public void setProperties() {
@@ -85,9 +81,7 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
         container.add(accountNumberInfo);
         container.add(tableLabel);
         container.add(transactionsInfo);
-        container.add(changePasswordButton);
         container.add(changePinNumberButton);
-        container.add(changePersonalDataButton);
     }
 
     public void initTable() {
@@ -145,8 +139,6 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     public void addActionEvent() {
         createNewTransactionButton.addActionListener(this);
         logoutBackButton.addActionListener(this);
-        changePasswordButton.addActionListener(this);
-        changePersonalDataButton.addActionListener(this);
         changePinNumberButton.addActionListener(this);
     }
 
@@ -159,14 +151,6 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
         }
         if (e.getSource() == changePinNumberButton) {
             new ChangePinFrame(account);
-            this.dispose();
-        }
-        if (e.getSource() == changePersonalDataButton) {
-            new ChangeDataFrame(account);
-            this.dispose();
-        }
-        if (e.getSource() == changePasswordButton) {
-            new ChangePasswordFrame(account);
             this.dispose();
         }
         if (e.getSource() == createNewTransactionButton) {

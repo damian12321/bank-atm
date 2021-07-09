@@ -22,10 +22,7 @@ public class TransactionFrame extends JFrame implements ActionListener {
     private final JLabel informationMessage = new JLabel();
     private final JLabel dataChangedMassage = new JLabel();
     private final JLabel accountsPin = new JLabel("Pin number: ");
-    private final JLabel descriptionLabel = new JLabel("Description: ");
     private final JPasswordField pinNumberField = new JPasswordField();
-    private final JTextArea descriptionArea = new JTextArea();
-    private final JTextField destinationField = new JTextField();
     private final JTextField amountField = new JTextField();
     private final JCheckBox showPin = new JCheckBox("Show Pin");
     private final JButton resetButton = new JButton("Reset");
@@ -33,7 +30,6 @@ public class TransactionFrame extends JFrame implements ActionListener {
     private final JButton accountBackButton = new JButton("Back to account");
     private final JRadioButton withdrawButton = new JRadioButton("Withdraw");
     private final JRadioButton depositButton = new JRadioButton("Deposit");
-    private final JRadioButton transferButton = new JRadioButton("Transfer");
     private final ButtonGroup typeGroup = new ButtonGroup();
 
 
@@ -59,18 +55,14 @@ public class TransactionFrame extends JFrame implements ActionListener {
     public void setLocationAndSize() {
         welcomeTextLabel.setBounds(300, 20, 400, 30);
         transactionTypeLabel.setBounds(250, 100, 300, 30);
-        withdrawButton.setBounds(200, 130, 100, 30);
-        depositButton.setBounds(350, 130, 100, 30);
-        transferButton.setBounds(500, 130, 100, 30);
+        withdrawButton.setBounds(250, 130, 100, 30);
+        depositButton.setBounds(400, 130, 100, 30);
         amountLabel.setBounds(250, 170, 100, 30);
         amountField.setBounds(350, 170, 150, 30);
         accountDestinationLabel.setBounds(100, 310, 250, 30);
-        destinationField.setBounds(350, 310, 150, 30);
         accountsPin.setBounds(235, 240, 150, 30);
         pinNumberField.setBounds(350, 240, 150, 30);
         showPin.setBounds(350, 270, 150, 30);
-        descriptionLabel.setBounds(235, 380, 150, 30);
-        descriptionArea.setBounds(350, 380, 150, 60);
         resetButton.setBounds(370, 460, 100, 30);
         submitButton.setBounds(450, 550, 200, 30);
         accountBackButton.setBounds(150, 550, 200, 30);
@@ -86,12 +78,7 @@ public class TransactionFrame extends JFrame implements ActionListener {
         transactionTypeLabel.setFont(new Font("INK Free", Font.BOLD, 20));
         depositButton.setBackground(COLOR);
         withdrawButton.setBackground(COLOR);
-        transferButton.setBackground(COLOR);
-        descriptionArea.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         accountDestinationLabel.setVisible(false);
-        destinationField.setVisible(false);
-        descriptionLabel.setVisible(false);
-        descriptionArea.setVisible(false);
         showPin.setBackground(COLOR);
 
     }
@@ -101,10 +88,8 @@ public class TransactionFrame extends JFrame implements ActionListener {
         container.add(transactionTypeLabel);
         typeGroup.add(withdrawButton);
         typeGroup.add(depositButton);
-        typeGroup.add(transferButton);
         container.add(withdrawButton);
         container.add(depositButton);
-        container.add(transferButton);
         container.add(amountLabel);
         container.add(resetButton);
         container.add(submitButton);
@@ -113,11 +98,8 @@ public class TransactionFrame extends JFrame implements ActionListener {
         container.add(informationMessage);
         container.add(amountField);
         container.add(accountDestinationLabel);
-        container.add(destinationField);
         container.add(accountsPin);
         container.add(pinNumberField);
-        container.add(descriptionArea);
-        container.add(descriptionLabel);
         container.add(showPin);
     }
 
@@ -127,7 +109,6 @@ public class TransactionFrame extends JFrame implements ActionListener {
         accountBackButton.addActionListener(this);
         depositButton.addActionListener(this);
         withdrawButton.addActionListener(this);
-        transferButton.addActionListener(this);
         showPin.addActionListener(this);
     }
 
@@ -137,9 +118,8 @@ public class TransactionFrame extends JFrame implements ActionListener {
 
         if (e.getSource() == resetButton) {
             amountField.setText("");
-            destinationField.setText("");
             pinNumberField.setText("");
-            descriptionArea.setText("");
+
         }
         if (e.getSource() == showPin) {
             if (showPin.isSelected()) {
@@ -151,23 +131,10 @@ public class TransactionFrame extends JFrame implements ActionListener {
         if (withdrawButton.isSelected()) {
             transactionType = TransactionType.WITHDRAWAL;
             accountDestinationLabel.setVisible(false);
-            destinationField.setVisible(false);
-            descriptionLabel.setVisible(false);
-            descriptionArea.setVisible(false);
         }
         if (depositButton.isSelected()) {
             transactionType = TransactionType.DEPOSIT;
             accountDestinationLabel.setVisible(false);
-            destinationField.setVisible(false);
-            descriptionLabel.setVisible(false);
-            descriptionArea.setVisible(false);
-        }
-        if (transferButton.isSelected()) {
-            transactionType = TransactionType.OUTGOING_TRANSFER;
-            accountDestinationLabel.setVisible(true);
-            destinationField.setVisible(true);
-            descriptionLabel.setVisible(true);
-            descriptionArea.setVisible(true);
         }
         if (e.getSource() == accountBackButton) {
             account = RESTClient.getAccount(account.getId(), account.getPassword());
@@ -182,12 +149,6 @@ public class TransactionFrame extends JFrame implements ActionListener {
                 error = true;
                 text = text + "Select a type of transaction.<br>";
             }
-            if (pinNumberField.getText().isEmpty() || amountField.getText().isEmpty() ||
-                    ((descriptionArea.getText().isEmpty() || destinationField.getText().isEmpty()) && transactionType == TransactionType.OUTGOING_TRANSFER)) {
-                error = true;
-                text = text + "Data fields must not be empty.<br>";
-            }
-
             if (error) {
                 informationMessage.setForeground(Color.red);
                 informationMessage.setText(text);
@@ -200,11 +161,6 @@ public class TransactionFrame extends JFrame implements ActionListener {
                 } catch (NumberFormatException nfe) {
                     response = "Amount field is incorrect.";
                 }
-                if ((transactionType == TransactionType.OUTGOING_TRANSFER) && response.isEmpty()) {
-                    response = RESTClient.transferMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()),
-                            Integer.parseInt(destinationField.getText()), Float.parseFloat(amountField.getText()), descriptionArea.getText());
-
-                }
                 if ((transactionType == TransactionType.WITHDRAWAL) && response.isEmpty()) {
                     response = RESTClient.withdrawMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
@@ -212,7 +168,7 @@ public class TransactionFrame extends JFrame implements ActionListener {
                     response = RESTClient.depositMoney(account.getAccountNumber(), Integer.parseInt(pinNumberField.getText()), Float.parseFloat(amountField.getText()));
                 }
 
-                if (response.startsWith("The money has been transferred") || response.startsWith("Withdrawal") || response.startsWith("Deposit")) {
+                if (response.startsWith("Withdrawal") || response.startsWith("Deposit")) {
                     informationMessage.setVisible(false);
                     dataChangedMassage.setVisible(true);
                     transactionCompleted = true;
