@@ -138,7 +138,12 @@ public class TransactionFrame extends JFrame implements ActionListener {
         }
         if (e.getSource() == accountBackButton) {
             account = RESTClient.getAccount(account.getId(), account.getPassword());
-            new AccountPanelFrame(account);
+            if(account==null)
+            {
+                new LoginJFrame();
+            }else {
+                new AccountPanelFrame(account);
+            }
             this.dispose();
         }
         if ((e.getSource() == submitButton) && !transactionCompleted) {
