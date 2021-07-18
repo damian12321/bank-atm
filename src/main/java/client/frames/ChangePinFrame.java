@@ -3,6 +3,7 @@ package client.frames;
 import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.utils.FrameSetup;
+import client.utils.Session;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,6 @@ public class ChangePinFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
     private Account account;
     private boolean pinChanged = false;
-    private final int oldPin;
     private final Container container = getContentPane();
     private final JLabel welcomeTextLabel = new JLabel("Change your pin number ");
     private final JLabel infoAboutPin = new JLabel("Pin number will be used to the account transactions. Only digits allowed. It must be at least four digits long.");
@@ -33,7 +33,6 @@ public class ChangePinFrame extends JFrame implements ActionListener {
 
     public ChangePinFrame(Account account) {
         this.account = account;
-        this.oldPin = account.getPinNumber();
         setFrameManager();
         setLayoutManager();
         setLocationAndSize();
@@ -109,7 +108,12 @@ public class ChangePinFrame extends JFrame implements ActionListener {
             accountsPinConfirmField.setText("");
         }
         if (e.getSource() == accountBackButton) {
-            new AccountPanelFrame(account);
+            String response = RESTClient.getResponseBody(account.getId(), Session.password);
+            if (response.endsWith("not active.")) {
+                new LoginJFrame();
+            } else {
+                new AccountPanelFrame(account);
+            }
             this.dispose();
         }
         if (e.getSource() == showPin) {
@@ -122,15 +126,11 @@ public class ChangePinFrame extends JFrame implements ActionListener {
         if ((e.getSource() == submitButton) && !pinChanged) {
             boolean error = false;
             String text = "<html>";
-            if (!oldPinNumberField.getText().equals(oldPin + "")) {
-                error = true;
-                text = text + "Old pin number is not correct.<br>";
-            }
             if (!accountsPinField.getText().equals(accountsPinConfirmField.getText())) {
                 error = true;
                 text = text + "Pin numbers are not the same.<br>";
             }
-            if (accountsPinField.getText().equals(oldPin + "") && !error) {
+            if (accountsPinField.getText().equals(oldPinNumberField.getText() + "") && !error) {
                 error = true;
                 text = text + "Pin number cannot be the same as the old one.<br>";
             }
@@ -155,18 +155,17 @@ public class ChangePinFrame extends JFrame implements ActionListener {
                 informationMessage.setText(text + "</html>");
                 informationMessage.setVisible(true);
             } else {
-                account.setPinNumber(Integer.parseInt(accountsPinField.getText()));
-                Account response = RESTClient.updateAccount(account);
-                if (response.getId() != 0) {
-                    account = response;
+                String response = RESTClient.changePin(account.getAccountNumber(), Integer.parseInt(oldPinNumberField.getText()),
+                        Integer.parseInt(accountsPinField.getText()));
+                if (response.equals("Pin number has been changed")) {
                     informationMessage.setVisible(false);
                     pinChangedMassage.setVisible(true);
                     pinChanged = true;
-                    pinChangedMassage.setText("<html>Your pin number has been changed.</html>");
                     pinChangedMassage.setForeground(Color.green);
+                    pinChangedMassage.setText("<html>Pin number has been changed.</html>");
                 } else {
                     informationMessage.setVisible(true);
-                    informationMessage.setText("Something went wrong.");
+                    informationMessage.setText(response);
                     informationMessage.setForeground(Color.red);
                 }
 

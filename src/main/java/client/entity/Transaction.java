@@ -2,6 +2,7 @@ package client.entity;
 
 import client.enums.TransactionType;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 import java.util.Objects;
 

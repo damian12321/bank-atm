@@ -7,8 +7,8 @@ import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 public class FrameSetup {
     private static final Color COLOR = new Color(227, 227, 227);
-    public static void setupFrame(JFrame jFrame)
-    {
+
+    public static void setupFrame(JFrame jFrame) {
 
         jFrame.setTitle("Damian's Bank");
         jFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);

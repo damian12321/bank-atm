@@ -2,13 +2,10 @@ package client.RESTClient;
 
 import client.entity.Account;
 import client.entity.Transaction;
-import client.utils.DateDeserializer;
 import client.utils.HttpConnectionHelper;
-import com.google.gson.*;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import client.utils.Session;
+
 import java.net.HttpURLConnection;
-import java.util.Date;
 import java.util.List;
 
 
@@ -29,36 +26,24 @@ public class RESTClient {
     }
 
 
-    public static Account getAccount(int idNumber, String password) {
-        Account account = null;
+    public static String getResponseBody(int idNumber, String password) {
         String url = "http://localhost:8080/api/accounts/" + idNumber + "/" + password;
         String requestType = "GET";
         HttpURLConnection con = new HttpConnectionHelper.Builder().addUrl(url).setRequestMethod(requestType).openConnection().build();
-        try {
-            InputStreamReader inputStreamReader = new InputStreamReader(con.getInputStream());
-            account = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(inputStreamReader, Account.class);
-            inputStreamReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return account;
+        return HttpConnectionHelper.sendRequestAndReceiveResponse(con);
     }
 
     public static List<Transaction> getAccountTransactions(Account account) {
-        String url = "http://localhost:8080/api/accounts/" + account.getId() + "/" + account.getPassword() + "/transactions";
+        String url = "http://localhost:8080/api/accounts/" + account.getId() + "/" + Session.password + "/transactions";
         String requestType = "GET";
         HttpURLConnection con = new HttpConnectionHelper.Builder().addUrl(url).setRequestMethod(requestType).openConnection().build();
-        return HttpConnectionHelper.getListOfObjects(con,1);
+        return HttpConnectionHelper.getListOfObjects(con, 1);
     }
 
-    public static Account updateAccount(Account account) {
-        Account result;
-        String url = "http://localhost:8080/api/accounts/";
-        String requestType = "PUT";
+    public static String changePin(int accountId, int oldPin, int newPin) {
+        String url = "http://localhost:8080/api/accounts/changePin/" + accountId + "/" + oldPin + "/" + newPin;
+        String requestType = "POST";
         HttpURLConnection con = new HttpConnectionHelper.Builder().addUrl(url).setRequestMethod(requestType).openConnection().build();
-        String response = HttpConnectionHelper.sendDataAndReceiveResponse(con, account);
-        result = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(response, Account.class);
-        return result;
-
+        return HttpConnectionHelper.sendRequestAndReceiveResponse(con);
     }
 }

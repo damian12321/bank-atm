@@ -4,6 +4,7 @@ import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.entity.Transaction;
 import client.utils.FrameSetup;
+
 import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ public class AccountPanelFrame extends JFrame implements ActionListener {
     private final Account account;
     private final List<Transaction> transactionList;
     private final Container container = getContentPane();
-    private final  JLabel welcomeTextLabel = new JLabel();
+    private final JLabel welcomeTextLabel = new JLabel();
     private final JLabel balanceInfo = new JLabel("Your balance: ");
     private final JLabel balance = new JLabel();
     private final JLabel accountNumberInfo = new JLabel("Your account number: ");

@@ -9,6 +9,7 @@ public class CustomExceptionHandler {
         this.message = message;
     }
 
+
     public int getStatus() {
         return status;
     }

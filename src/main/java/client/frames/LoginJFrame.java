@@ -2,12 +2,16 @@ package client.frames;
 
 import client.RESTClient.RESTClient;
 import client.entity.Account;
+import client.utils.DateDeserializer;
 import client.utils.FrameSetup;
+import client.utils.Session;
+import com.google.gson.GsonBuilder;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 public class LoginJFrame extends JFrame implements ActionListener {
     private static final Color COLOR = new Color(227, 227, 227);
@@ -53,7 +57,7 @@ public class LoginJFrame extends JFrame implements ActionListener {
         loginButton.setBounds(250, 300, 100, 30);
         resetButton.setBounds(400, 300, 100, 30);
         exitAppButton.setBounds(280, 550, 200, 30);
-        informationMessage.setBounds(250, 320, 300, 100);
+        informationMessage.setBounds(250, 320, 350, 100);
         informationMessage.setVisible(false);
 
     }
@@ -104,18 +108,26 @@ public class LoginJFrame extends JFrame implements ActionListener {
                 informationMessage.setText(text);
                 informationMessage.setVisible(true);
             } else {
-                account = RESTClient.getAccount(Integer.parseInt(userTextField.getText()), passwordField.getText());
-                    if (account == null) {
-                        informationMessage.setVisible(true);
-                        informationMessage.setText("The user name or password is incorrect.");
-                        informationMessage.setForeground(Color.red);
-                    } else {
-                        new AccountPanelFrame(account);
-                        this.dispose();
-                    }
+                String response = RESTClient.getResponseBody(Integer.parseInt(userTextField.getText()), passwordField.getText());
+                if (response.startsWith("{\"id")) {
+                    account = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer()).create().fromJson(response, Account.class);
+                } else {
+                    informationMessage.setVisible(true);
+                    informationMessage.setText(response);
+                    informationMessage.setForeground(Color.red);
                 }
-
+                if (account == null) {
+                    informationMessage.setVisible(true);
+                    informationMessage.setText(response);
+                    informationMessage.setForeground(Color.red);
+                } else {
+                    Session.password = (passwordField.getText());
+                    new AccountPanelFrame(account);
+                    this.dispose();
+                }
             }
+
+        }
         if (e.getSource() == resetButton) {
             userTextField.setText("");
             passwordField.setText("");

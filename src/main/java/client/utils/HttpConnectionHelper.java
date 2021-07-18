@@ -10,12 +10,10 @@ import com.google.gson.reflect.TypeToken;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,41 +73,6 @@ public class HttpConnectionHelper {
                 response.append(responseLine.trim());
             }
             if (httpURLConnection.getResponseCode() == 200) {
-                result = response.toString();
-            } else {
-                CustomExceptionHandler exception = new Gson().fromJson(response.toString(), CustomExceptionHandler.class);
-                result = exception.getMessage();
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    public static String sendDataAndReceiveResponse(HttpURLConnection httpURLConnection, Object objectToSend) {
-        String result = "";
-        try {
-            String object = new GsonBuilder().setDateFormat("dd-MM-yyyy hh:mm:ss").create().toJson(objectToSend);
-            try (OutputStream os = httpURLConnection.getOutputStream()) {
-                byte[] input = object.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-            BufferedReader br;
-            InputStreamReader isr;
-            if (httpURLConnection.getResponseCode() == 200 || httpURLConnection.getResponseCode() == 201) {
-                isr = new InputStreamReader(httpURLConnection.getInputStream());
-            } else {
-                isr = new InputStreamReader(httpURLConnection.getErrorStream());
-            }
-            br = new BufferedReader(isr);
-            StringBuilder response = new StringBuilder();
-            String responseLine;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-
-            if (httpURLConnection.getResponseCode() == 200 || httpURLConnection.getResponseCode() == 201) {
                 result = response.toString();
             } else {
                 CustomExceptionHandler exception = new Gson().fromJson(response.toString(), CustomExceptionHandler.class);

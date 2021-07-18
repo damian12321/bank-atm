@@ -4,6 +4,8 @@ import client.RESTClient.RESTClient;
 import client.entity.Account;
 import client.enums.TransactionType;
 import client.utils.FrameSetup;
+import client.utils.Session;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -137,11 +139,10 @@ public class TransactionFrame extends JFrame implements ActionListener {
             accountDestinationLabel.setVisible(false);
         }
         if (e.getSource() == accountBackButton) {
-            account = RESTClient.getAccount(account.getId(), account.getPassword());
-            if(account==null)
-            {
+            String response = RESTClient.getResponseBody(account.getId(), Session.password);
+            if (response.endsWith("not active.")) {
                 new LoginJFrame();
-            }else {
+            } else {
                 new AccountPanelFrame(account);
             }
             this.dispose();
